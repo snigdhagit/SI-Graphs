@@ -59,6 +59,7 @@ def GGM_instance(n=100, p=100, max_edges=10):
     # generate a PD precision
     precision = np.random.uniform(low=-max_off_diag,high=max_off_diag,
                                   size=(p,p))
+    # precision = max_off_diag * (np.random.binomial(n=1,p=0.5,size=(p, p)) * 2 - 1)
     # symmetrize precision
     precision = np.tril(precision)
     precision = precision + precision.T
@@ -67,7 +68,11 @@ def GGM_instance(n=100, p=100, max_edges=10):
     np.fill_diagonal(precision, 1)
     cov = np.linalg.inv(precision)
 
+    # standardize the covariance
+    cov = cov / np.outer(np.sqrt(np.diag(cov)), np.sqrt(np.diag(cov)))
+    precision = np.linalg.inv(cov)
+
     X = np.random.multivariate_normal(mean=np.zeros(p),
                                       cov=cov, size=n)
 
-    return precision, cov, X
+    return precision*n, cov/n, X/np.sqrt(n)

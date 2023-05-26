@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/instance.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/instance_notebook.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_splitting.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/Tests/test_data_splitting.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/Tests/test_discrete_family.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/Tests/test_nbd_naive.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/nbd_lasso_notebook.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/instance.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/instance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/instance_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/instance_notebook.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/nbd_lasso.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/nbd_lasso.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +42,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/yilingh/Desktop/PhD/SI_Codes/SI-Graphs&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
@@ -50,7 +57,8 @@
       <workItem from="1683567218645" duration="53000" />
       <workItem from="1683573536764" duration="168000" />
       <workItem from="1683573852384" duration="8883000" />
-      <workItem from="1683689601560" duration="1531000" />
+      <workItem from="1683689601560" duration="40051000" />
+      <workItem from="1684964850846" duration="10651000" />
     </task>
     <servers />
   </component>
