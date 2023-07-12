@@ -69,10 +69,10 @@ def GGM_instance(n=100, p=100, max_edges=10):
     cov = np.linalg.inv(precision)
 
     # standardize the covariance
-    cov = cov / np.outer(np.sqrt(np.diag(cov)), np.sqrt(np.diag(cov)))
-    precision = np.linalg.inv(cov)
+    # cov = cov / np.outer(np.sqrt(np.diag(cov)), np.sqrt(np.diag(cov)))
+    # precision = np.linalg.inv(cov)
 
     X = np.random.multivariate_normal(mean=np.zeros(p),
                                       cov=cov, size=n)
 
-    return precision*n, cov/n, X/np.sqrt(n)
+    return precision, cov, X

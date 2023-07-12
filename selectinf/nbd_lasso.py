@@ -297,8 +297,8 @@ class nbd_lasso(object):
         self.nfeature = X.shape[1]
         if np.asarray(weights).shape == ():
             weights = np.ones((self.nfeature,self.nfeature - 1)) * weights
-            print(weights.shape)
-            print(weights)
+            #print(weights.shape)
+            #print(weights)
         self.weights = weights
         self.loglike = loglike
         # print(weights.shape)
@@ -481,7 +481,8 @@ class nbd_lasso(object):
                  quadratic=None,
                  ridge_term=None,
                  randomizer_scale=None,
-                 nonrandomized=False):
+                 nonrandomized=False,
+                 n_scaled=True):
         r"""
         Squared-error LASSO with feature weights.
         Objective function is (before randomization)
@@ -535,10 +536,14 @@ class nbd_lasso(object):
             feature_weights = []
             for i in range(p):
                 sigma_i = np.sqrt(np.sum(X[:,i]**2) / n)
-                # Pre root n scaling: weight_sclar = 2 * np.sqrt(n) * sigma_i * Phi_tilde_inv(alpha/(2*p**2))
-                # After root n scaling:
-                weight_sclar = 2 * sigma_i * Phi_tilde_inv(alpha / (2 * p ** 2))
-                #2 * sigma_i * Phi_tilde_inv(alpha/(2*p**2)) / np.sqrt(n)
+                # print("sigma_i:", sigma_i)
+                if n_scaled:
+                    # X with root n scaling
+                    weight_sclar = 2 * sigma_i * Phi_tilde_inv(alpha / (2 * p ** 2))
+                else:
+                    # Pre root n scaling:
+                    weight_sclar = 2 * np.sqrt(n) * sigma_i * Phi_tilde_inv(alpha / (2 * p ** 2))
+
                 feature_weights_i = np.ones(p-1) * weight_sclar
                 feature_weights.append(feature_weights_i)
 
@@ -547,7 +552,11 @@ class nbd_lasso(object):
 
         randomizer = []
         for i in range(p):
-            randomizer_scale_i = randomizer_scale * np.std(X[:,i], ddof=1)
+            if n_scaled:
+                randomizer_scale_i = randomizer_scale * np.std(X[:, i], ddof=1)
+            else:
+                randomizer_scale_i = randomizer_scale * np.std(X[:, i], ddof=1) * np.sqrt(n)
+
             randomizer.append(randomization.isotropic_gaussian((p - 1,), randomizer_scale_i))
 
         return nbd_lasso(X=X,

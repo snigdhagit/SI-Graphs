@@ -119,7 +119,7 @@ class discrete_family(object):
     def theta(self, _theta):
         if _theta != self._theta:
             _thetaX = _theta * self.sufficient_stat + self._lw
-            _largest = _thetaX.max() - 5  # try to avoid over/under flow, 5 seems arbitrary
+            _largest = _thetaX.max() # - 10  # try to avoid over/under flow, 10 seems arbitrary
             _exp_thetaX = np.exp(_thetaX - _largest)
             _prod = _exp_thetaX
             self._partition = np.sum(_prod)
