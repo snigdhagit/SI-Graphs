@@ -338,107 +338,9 @@ class nbd_lasso(object):
                                                                  solve_args=solve_args)
 
         active_signs = np.sign(self.observed_soln)
-        active = self._active = active_signs != 0
-
-        """self._lagrange = self.penalty.weights
-        unpenalized = self._lagrange == 0
-
-        active *= ~unpenalized
-
-        self._overall = overall = (active + unpenalized) > 0
-        self._inactive = inactive = ~self._overall
-        self._unpenalized = unpenalized
-
-        _active_signs = active_signs.copy()
-
-        # don't release sign of unpenalized variables
-        _active_signs[unpenalized] = np.nan
-        ordered_variables = list((tuple(np.nonzero(active)[0]) +
-                                  tuple(np.nonzero(unpenalized)[0])))
-        self.selection_variable = {'sign': _active_signs,
-                                   'variables': ordered_variables}
-
-        # initial state for opt variables
-
-        initial_scalings = np.fabs(self.observed_soln[active])
-        initial_unpenalized = self.observed_soln[self._unpenalized]
-
-        self.observed_opt_state = np.concatenate([initial_scalings,
-                                                  initial_unpenalized])
-
-        _beta_unpenalized = restricted_estimator(self.loglike,
-                                                 self._overall,
-                                                 solve_args=solve_args)
-
-        beta_bar = np.zeros(p)
-        beta_bar[overall] = _beta_unpenalized
-        self._beta_full = beta_bar
-
-        num_opt_var = self.observed_opt_state.shape[0]
-
-        _hessian, _hessian_active, _hessian_unpen = _compute_hessian(self.loglike,
-                                                                     beta_bar,
-                                                                     active,
-                                                                     unpenalized)
-
-        opt_linear = np.zeros((p, num_opt_var))
-        _score_linear_term = np.zeros((p, num_opt_var))
-
-        _score_linear_term = -np.hstack([_hessian_active, _hessian_unpen])
-
-        self.observed_score_state = _score_linear_term.dot(_beta_unpenalized)
-        self.observed_score_state[inactive] += self.loglike.smooth_objective(beta_bar, 'grad')[inactive]
-
-        def signed_basis_vector(p, j, s):
-            v = np.zeros(p)
-            v[j] = s
-            return v
-
-        active_directions = np.array([signed_basis_vector(p,
-                                                          j,
-                                                          active_signs[j])
-                                      for j in np.nonzero(active)[0]]).T
-
-        scaling_slice = slice(0, active.sum())
-        if np.sum(active) == 0:
-            _opt_hessian = 0
-        else:
-            _opt_hessian = (_hessian_active * active_signs[None, active]
-                            + self.ridge_term * active_directions)
-
-        opt_linear[:, scaling_slice] = _opt_hessian
-
-        unpenalized_slice = slice(active.sum(), num_opt_var)
-        unpenalized_directions = np.array([signed_basis_vector(p, j, 1) for
-                                           j in np.nonzero(unpenalized)[0]]).T
-        if unpenalized.sum():
-            opt_linear[:, unpenalized_slice] = (_hessian_unpen
-                                                + self.ridge_term *
-                                                unpenalized_directions)
-
-        self.opt_linear = opt_linear
-
-        self._setup = True
-        A_scaling = -np.identity(num_opt_var)
-        b_scaling = np.zeros(num_opt_var)
-
-        self._unscaled_cov_score = _hessian
-
-        self.num_opt_var = num_opt_var
-
-        self._setup_sampler_data = (A_scaling[:active.sum()],
-                                    b_scaling[:active.sum()],
-                                    opt_linear,
-                                    self.observed_subgrad)"""
+        self._active = active_signs != 0
 
         return active_signs
-
-    def setup_inference(self,
-                        dispersion):
-
-        if self.num_opt_var > 0:
-            self._setup_sampler(*self._setup_sampler_data,
-                                dispersion=dispersion)
 
     def _solve_randomized_problem(self,
                                   perturb=None,
@@ -446,11 +348,11 @@ class nbd_lasso(object):
 
         # take a new perturbation if supplied
         if perturb is not None:
-            print("Custom perturbation")
+            #print("Custom perturbation")
             assert perturb.shape == (self.nfeature, self.nfeature-1)
             self._initial_omega = perturb
         else:
-            print("Sampled perturbation")
+            #print("Sampled perturbation")
             self._initial_omega = np.zeros((self.nfeature, self.nfeature-1))
             for i in range(self.nfeature):
                 self._initial_omega[i] = self.randomizer[i].sample()

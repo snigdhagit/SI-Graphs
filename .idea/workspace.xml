@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_ds.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/test_integration.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/test_nbd_simulations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/instance.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/instance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_splitting.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/test_edge_inference.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/Tests/test_data_splitting.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/test_data_splitting.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/test_nbd_naive.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/test_nbd_naive.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/nbd_lasso.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/nbd_lasso.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +101,8 @@
       <workItem from="1686268908371" duration="13882000" />
       <workItem from="1687199509626" duration="37346000" />
       <workItem from="1687959207081" duration="1188000" />
-      <workItem from="1688089162698" duration="38130000" />
+      <workItem from="1688089162698" duration="38910000" />
+      <workItem from="1689250520065" duration="2996000" />
     </task>
     <servers />
   </component>
