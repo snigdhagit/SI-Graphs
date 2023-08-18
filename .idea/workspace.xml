@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/selectinf/Tests/test_approx_inf.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/approx_reference_nbd.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/nbd_helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_ds.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_ds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/Tests/test_data_splitting.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/test_data_splitting.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/test_edge_inference.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/test_edge_inference.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/test_nbd_simulations.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/test_nbd_simulations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Utils/barrier_affine.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Utils/barrier_affine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/nbd_lasso.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/nbd_lasso.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +53,22 @@
       <recent name="$PROJECT_DIR$/selectinf/Tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_nbd_simulations.test_nbd_simulations">
+  <component name="RunManager" selected="Python tests.Python tests for test_nbd_simulations.test_plotting">
+    <configuration name="Python tests for test_approx_inf.test_nbd_simulations" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="SI-Graphs" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/selectinf/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_approx_inf.test_nbd_simulations&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for test_nbd_simulations.test_nbd_simulations" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="SI-Graphs" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -78,8 +101,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_nbd_simulations.test_nbd_simulations" />
         <item itemvalue="Python tests.Python tests for test_nbd_simulations.test_plotting" />
+        <item itemvalue="Python tests.Python tests for test_nbd_simulations.test_nbd_simulations" />
+        <item itemvalue="Python tests.Python tests for test_approx_inf.test_nbd_simulations" />
       </list>
     </recent_temporary>
   </component>
@@ -102,7 +126,17 @@
       <workItem from="1687199509626" duration="37346000" />
       <workItem from="1687959207081" duration="1188000" />
       <workItem from="1688089162698" duration="38910000" />
-      <workItem from="1689250520065" duration="2996000" />
+      <workItem from="1689250520065" duration="3075000" />
+      <workItem from="1689589415390" duration="2948000" />
+      <workItem from="1689607898061" duration="211000" />
+      <workItem from="1689738625619" duration="37475000" />
+      <workItem from="1690321081047" duration="120000" />
+      <workItem from="1690321248098" duration="9826000" />
+      <workItem from="1690388629248" duration="1152000" />
+      <workItem from="1690390747910" duration="12138000" />
+      <workItem from="1690500160234" duration="6512000" />
+      <workItem from="1690913713729" duration="1263000" />
+      <workItem from="1691605428368" duration="65275000" />
     </task>
     <servers />
   </component>
@@ -121,6 +155,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/SI_Graphs$.coverage" NAME=" Coverage Results" MODIFIED="1688976273078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
+    <SUITE FILE_PATH="coverage/SI_Graphs$.coverage" NAME=" Coverage Results" MODIFIED="1692381831400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
   </component>
 </project>

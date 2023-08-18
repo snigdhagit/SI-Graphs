@@ -80,7 +80,7 @@ def crit_func(test_statistic, left_cut, right_cut):
 
 class discrete_family(object):
 
-    def __init__(self, sufficient_stat, weights, theta=0.):
+    def __init__(self, sufficient_stat, weights, logweights=None, theta=0.):
         r"""
         A  discrete 1-dimensional
         exponential family with reference measure $\sum_j w_j \delta_{X_j}$
@@ -102,7 +102,13 @@ class discrete_family(object):
         xw = np.array(sorted(zip(sufficient_stat, weights)), np.float)
         self._x = xw[:, 0]
         self._w = xw[:, 1]
-        self._lw = np.log(xw[:, 1])
+        if logweights is not None:
+            # If log weights is passed to the initializer to avoid loss
+            # of precision due to taking exp and log of the weights
+            x_lw = np.array(sorted(zip(sufficient_stat, logweights)), np.float)
+            self._lw = x_lw[:, 1]
+        else:
+            self._lw = np.log(xw[:, 1])
         self._w /= self._w.sum()  # make sure they are a pmf
         self.n = len(xw)
         self._theta = np.nan
@@ -121,6 +127,19 @@ class discrete_family(object):
             _thetaX = _theta * self.sufficient_stat + self._lw
             _largest = _thetaX.max() # - 10  # try to avoid over/under flow, 10 seems arbitrary
             _exp_thetaX = np.exp(_thetaX - _largest)
+            if np.isnan(_exp_thetaX).sum() != 0:
+                print("Normalized pdf is nan")
+                print("theta:", _theta)
+                print("suff stat max:", np.max(self.sufficient_stat),
+                      "suff stat min:", np.min(self.sufficient_stat))
+                min_log_order = np.min(_thetaX) - _largest
+                max_log_order = np.max(_thetaX) - _largest
+                print("Min log order:", min_log_order)
+                print("Min _thetaX:", np.min(_thetaX))
+                print("Min log weights:", np.min(self._lw))
+                print("Max log order:", max_log_order)
+                print("# nan in _thetaX:", np.isnan(_thetaX).sum())
+
             _prod = _exp_thetaX
             self._partition = np.sum(_prod)
             self._pdf = _prod / self._partition

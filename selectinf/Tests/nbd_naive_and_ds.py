@@ -5,6 +5,7 @@ from selectinf.nbd_lasso import nbd_lasso
 from selectinf.Utils.discrete_family import discrete_family
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
+from timebudget import timebudget
 from scipy.optimize import root_scalar
 
 ## Helper functions that manages the graph
@@ -88,8 +89,10 @@ def bootstrap_variance(X, b_max=500):
             inner_vars[i,j] = np.var(S_ij_sample)
     return inner_vars
 
-def edge_inference(j0, k0, S, n, p, var=None,
+def edge_inference(j0k0, S, n, p, var=None,
                    ngrid=10000):
+    j0 = j0k0[0]
+    k0 = j0k0[1]
     # n_total: the total data points in data splitting
     #        : the raw dimension of X in naive
     inner_prod = S[j0,k0]
@@ -100,18 +103,29 @@ def edge_inference(j0, k0, S, n, p, var=None,
 
     #stat_grid = np.zeros((ngrid,))
     #print("n=100 assumed")
-    stat_grid = np.linspace(-1,1,num=ngrid)
+    stat_grid = np.linspace(-3,3,num=ngrid)
     def log_det_S_j_k(s_val):
         S_j_k = S_copy
         S_j_k[j0,k0] = s_val
         S_j_k[k0,j0] = s_val
-        return np.log(np.abs(np.linalg.det(S_j_k))) * (n-p-1)/2
+        if np.linalg.det(S_j_k) < 0:
+            #print("negative det", np.linalg.det(S_j_k),
+            #      "grid", s_val)
+            return -np.inf
+        return np.log((np.linalg.det(S_j_k))) * (n-p-1)/2
 
     logWeights = np.zeros((ngrid,))
     for g in range(ngrid):
         logWeights[g] = log_det_S_j_k(stat_grid[g])
 
-    condlWishart = discrete_family(stat_grid, np.exp(logWeights))
+    # normalize logWeights
+    logWeights = logWeights - np.max(logWeights)
+    # Set extremely small values (< e^-500) to e^-500 for numerical stability
+    # logWeights_zero = (logWeights < -500)
+    # logWeights[logWeights_zero] = -500
+
+    condlWishart = discrete_family(stat_grid, np.exp(logWeights),
+                                   logweights=logWeights)
 
     neg_interval = condlWishart.equal_tailed_interval(observed=inner_prod,
                                                       alpha=0.1)
@@ -242,7 +256,7 @@ def conditional_inference(X, nonzero):
                 #S_ = X.T @ X
                 #theta_h = np.linalg.inv(S_)
                 # lcb, ucb are intervals for n * theta
-                pivot, lcb, ucb = edge_inference(j0=i, k0=j, S=S_, n=n, p=p, ngrid=10000)
+                pivot, lcb, ucb = edge_inference(j0k0=(i,j), S=S_, n=n, p=p, ngrid=10000)
                 #pivot, lcb, ucb = edge_inference_scipy(j0=i, k0=j, S=S_,
                  #                                      n=n, p=p, Theta_hat=theta_h)
                 # interval = invert_interval(neg_int, scalar=n)
@@ -254,10 +268,11 @@ def conditional_inference(X, nonzero):
 
     return intervals#, condlDists
 
-def get_coverage(nonzero, intervals, prec, n, p):
+def get_coverage(nonzero, intervals, prec, n, p, scale=True):
     # intervals are scaled back to be intervals for theta
     # prec is theta * n, needs to be scaled back
-    prec = prec / n
+    if scale:
+        prec = prec / n
 
     coverage = np.zeros((p,p))
     for i in range(p):
@@ -271,7 +286,7 @@ def get_coverage(nonzero, intervals, prec, n, p):
     return coverage
 
 ## Naive inference implementations
-def naive_inference(X, prec, weights=1., true_nonzero=None):
+def naive_inference(X, prec, weights_const=1., true_nonzero=None):
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
     n,p = X.shape
@@ -284,7 +299,7 @@ def naive_inference(X, prec, weights=1., true_nonzero=None):
         nonzero=true_nonzero
     else:
         print("E estimated")
-        nbd_instance = nbd_lasso.gaussian(X, n_scaled=True, feature_weights=weights)
+        nbd_instance = nbd_lasso.gaussian(X, n_scaled=True, weights_const=weights_const)
         active_signs_nonrandom = nbd_instance.fit(perturb=np.zeros((p,p-1)))
         nonzero = get_nonzero(active_signs_nonrandom)
 
@@ -308,7 +323,7 @@ def naive_inference(X, prec, weights=1., true_nonzero=None):
         return nonzero, intervals, cov_rate, avg_len
     return None, None, None, None
 
-def data_splitting(X, prec, weights=1., proportion=0.5):
+def data_splitting(X, prec, weights_const=1., proportion=0.5):
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
     n,p = X.shape
@@ -323,7 +338,7 @@ def data_splitting(X, prec, weights=1., proportion=0.5):
     X_S = X[subset_select, :] / np.sqrt(n1)
     X_NS = X[~subset_select, :] / np.sqrt(n2)
 
-    nbd_instance = nbd_lasso.gaussian(X_S, n_scaled=True, feature_weights=weights)
+    nbd_instance = nbd_lasso.gaussian(X_S, n_scaled=True, weights_const=weights_const)
     active_signs_nonrandom = nbd_instance.fit(perturb=np.zeros((p,p-1)))
     nonzero = get_nonzero(active_signs_nonrandom)
     # print("Data Splitting |E|:", nonzero.sum())
@@ -384,4 +399,10 @@ def calculate_F1_score_graph(beta_true, selection):
         return 2 * precision * recall / (precision + recall)
     else:
         return 0
+
+
+## Parallelization
+@timebudget
+def run_complex_operations(operation, input, pool):
+    pool.map(operation, input)
 
