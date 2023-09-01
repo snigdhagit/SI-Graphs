@@ -103,7 +103,7 @@ def edge_inference(j0k0, S, n, p, var=None,
 
     #stat_grid = np.zeros((ngrid,))
     #print("n=100 assumed")
-    stat_grid = np.linspace(-3,3,num=ngrid)
+    stat_grid = np.linspace(-10,10,num=ngrid)
     def log_det_S_j_k(s_val):
         S_j_k = S_copy
         S_j_k[j0,k0] = s_val

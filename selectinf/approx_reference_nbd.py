@@ -116,10 +116,10 @@ def approx_inference(j0k0, query_spec, X_n, n, p, ngrid=10000, ncoarse=None, lev
     inner_prod = S[j0,k0] # S = X.T X / n
 
     S_copy = np.copy(S)
-    stat_grid = np.linspace(-3, 3, num=ngrid)
+    stat_grid = np.linspace(-10, 10, num=ngrid)
 
     if ncoarse is not None:
-        coarse_grid = np.linspace(-3, 3, ncoarse)
+        coarse_grid = np.linspace(-10, 10, ncoarse)
         eval_grid = coarse_grid
     else:
         eval_grid = stat_grid
@@ -161,7 +161,7 @@ def approx_inference(j0k0, query_spec, X_n, n, p, ngrid=10000, ncoarse=None, lev
                              kind='quadratic',
                              bounds_error=False,
                              fill_value='extrapolate')
-        grid = np.linspace(-3, 3, num=ngrid)
+        grid = np.linspace(-10, 10, num=ngrid)
         logWeights = np.zeros((ngrid,))
         for g in range(ngrid):
             #print(log_det_S_j_k(grid[g]))

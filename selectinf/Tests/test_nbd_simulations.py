@@ -57,7 +57,7 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
     oper_char["F1 score"] = []
     oper_char["E size"] = []
 
-    for p in [50]:#, 20, 30]:
+    for p in [10, 20, 50]:#, 20, 30]:
         for i in range(n_iter):
             n_instance = 0
             print(i)
@@ -65,7 +65,7 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=200, p=p, max_edges=1)
+                prec,cov,X = GGM_instance(n=200, p=p, max_edges=4)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
@@ -76,23 +76,25 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
                         true_non0[j,j] = False
                     print("Naive")
                     nonzero_n, intervals_n, cov_rate_n, avg_len_n = naive_inference(X, prec,
-                                                                                    weights_const=0.45)#, true_nonzero = true_non0)
+                                                                                    weights_const=0.5)#, true_nonzero = true_non0)
                     noselection = (nonzero_n is None)
                     # print(nonzero_n)
                     # print(nonzero_n.shape)
 
                 if not noselection:
                     print("DS")
-                    nonzero_ds, intervals_ds, cov_rate_ds, avg_len_ds = data_splitting(X, prec, weights_const=0.45,
+                    nonzero_ds, intervals_ds, cov_rate_ds, avg_len_ds = data_splitting(X, prec, weights_const=0.5,
                                                                                        proportion=proportion)
                     noselection = (nonzero_ds is None)
                     # print(nonzero_ds.shape)
+                    if not noselection:
+                        print("DS Length:", avg_len_ds)
 
                 if not noselection:
                     print("Approx")
                     nonzero_approx, intervals_approx, cov_rate_approx, avg_len_approx \
-                        = approx_inference_sim(X, prec, weights_const=0.45,
-                                               ridge_const=0., randomizer_scale=0.5,
+                        = approx_inference_sim(X, prec, weights_const=0.5,
+                                               ridge_const=1., randomizer_scale=1.,
                                                parallel=False)
                     noselection = (nonzero_approx is None)
                     # print(nonzero_ds.shape)
@@ -230,5 +232,5 @@ def test_plotting(path='GGM_naive_ds_approx.csv'):
     F1_plot.legend_.remove()
     size_plot.legend_.remove()
 
-    plt.suptitle("Naive and Data Splitting (Case 3.1)")
+    plt.suptitle("Naive and Data Splitting (s=4)")
     plt.show()
