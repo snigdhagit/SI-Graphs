@@ -7,6 +7,8 @@ import nose.tools as nt
 import collections
 collections.Callable = collections.abc.Callable
 import sys
+# For greatlakes simulations
+sys.path.append('/home/yilingh/SI-Graphs')
 
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -48,7 +50,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
 
 
 def nbd_simulations(n=1000, p=30, s=4, proportion=0.5,
-                    range=range(0, 100)):
+                    range_=range(0, 100)):
     # Operating characteristics
     oper_char = {}
     oper_char["p"] = []
@@ -59,7 +61,7 @@ def nbd_simulations(n=1000, p=30, s=4, proportion=0.5,
     oper_char["E size"] = []
 
     for p in [10, 20, 50]:
-        for i in range(range.start, range.stop):
+        for i in range(range_.start, range_.stop):
             n_instance = 0
             # print(i)
             # np.random.seed(i)
@@ -141,6 +143,6 @@ def nbd_simulations(n=1000, p=30, s=4, proportion=0.5,
 
 if __name__ == '__main__':
     argv = sys.argv
-    start, end = int(argv[1]), int(argv[2])
-    # print("start:", start, ", end:", end)
-    nbd_simulations(range=range(start, end))
+    start, end = 0, 10# int(argv[1]), int(argv[2])
+    print("start:", start, ", end:", end)
+    # nbd_simulations(range_=range(start, end))
