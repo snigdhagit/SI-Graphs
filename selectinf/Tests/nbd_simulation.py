@@ -139,10 +139,10 @@ def nbd_simulations(n=1000, p=30, s=4, proportion=0.5,
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx' + str(range.start) + '_' + str(range.stop) + '.csv', index=False)
+    oper_char_df.to_csv('GGM_naive_ds_approx' + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 if __name__ == '__main__':
     argv = sys.argv
-    start, end = 0, 10# int(argv[1]), int(argv[2])
-    print("start:", start, ", end:", end)
-    # nbd_simulations(range_=range(start, end))
+    start, end = int(argv[1]), int(argv[2])
+    # print("start:", start, ", end:", end)
+    nbd_simulations(range_=range(start, end))
