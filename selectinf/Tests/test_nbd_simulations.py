@@ -57,7 +57,7 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
     oper_char["F1 score"] = []
     oper_char["E size"] = []
 
-    for p in [10, 20, 50]:#, 20, 30]:
+    for p in [50]:#[10, 20, 50]:#, 20, 30]:
         for i in range(n_iter):
             n_instance = 0
             print(i)
@@ -65,7 +65,7 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=200, p=p, max_edges=4)
+                prec,cov,X = GGM_instance(n=3000, p=p, max_edges=4)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
