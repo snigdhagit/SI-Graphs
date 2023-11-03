@@ -82,7 +82,8 @@ class nbd_lasso(object):
 
     def fit(self,
             solve_args={'tol': 1.e-12, 'min_its': 50},
-            perturb=None):
+            perturb=None,
+            logic='OR'):
         """
         Fit the randomized lasso using `regreg`.
         Parameters
@@ -106,7 +107,7 @@ class nbd_lasso(object):
         # Nonzero flag
         self._active = active_signs != 0
         # Determine selection with OR logic
-        self.nonzero = get_nonzero(self._active, logic='OR')
+        self.nonzero = get_nonzero(self._active, logic=logic)
 
         self.cov_rands = []
         self.prec_rands = []
@@ -183,7 +184,7 @@ class nbd_lasso(object):
                          observed_subgrad=self.observed_subgrad,
                          observed_soln=self.observed_soln)
 
-    def inference(self, level=0.9, parallel=True):
+    def inference(self, level=0.9, parallel=True, ncoarse=100):
 
         query_spec = self.specification
         nonzero = query_spec.nonzero
@@ -204,7 +205,7 @@ class nbd_lasso(object):
                         task_idx.append((i, j))
             with Pool() as pool:
                 results = pool.map(partial(approx_inference, X_n=X_n, query_spec=query_spec,
-                                           n=n, p=p, ngrid=10000, ncoarse=50, level=level),
+                                           n=n, p=p, ngrid=10000, ncoarse=ncoarse, level=level),
                                    task_idx)
             for t in range(len(task_idx)):
                 pivot, lcb, ucb = results[t]
@@ -222,7 +223,7 @@ class nbd_lasso(object):
                         print("Inference for", i, ",", j)
                         pivot, lcb, ucb = approx_inference(query_spec=query_spec,
                                                            j0k0=(i,j), X_n=X_n, n=n, p=p,
-                                                           ngrid=10000, ncoarse=50, level=level)
+                                                           ngrid=10000, ncoarse=ncoarse, level=level)
                         intervals[i, j, 0] = lcb / n
                         intervals[i, j, 1] = ucb / n
                         # print("(", i, ",", j, "): (", lcb/n, ",", ucb/n, ")")

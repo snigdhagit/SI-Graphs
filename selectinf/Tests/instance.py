@@ -56,11 +56,11 @@ def GGM_instance(n=100, p=100, max_edges=10):
 
     # maximal off-diag value to guarantee diagonal dominance
     max_off_diag = 1/max_edges
-    max_off_diag = max_off_diag*0.9
 
     # generate a PD precision
-    precision = np.random.uniform(low=-max_off_diag,high=max_off_diag,
-                                  size=(p,p))
+    precision = (np.random.uniform(size=(p,p), low=0, high=max_off_diag) *
+                 (2 * (np.random.binomial(n=1, p=0.5, size=(p,p))) - 1))
+
     # precision = max_off_diag * (np.random.binomial(n=1,p=0.5,size=(p, p)) * 2 - 1)
     # symmetrize precision
     precision = np.tril(precision)

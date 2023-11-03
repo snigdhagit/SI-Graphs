@@ -233,10 +233,12 @@ def edge_inference_scipy(j0, k0, S, n, p, Theta_hat=None, var=None, level=0.9, n
 
     return pivot, root_up, root_low
 
-def get_nonzero(active_signs):
+def get_nonzero(active_signs, logic='OR'):
     active_sign_sq = add_diag(active_signs, 0)
-    nonzero = ((active_sign_sq + active_sign_sq.T) != 0) # OR
-    # nonzero = ((active_sign_sq * active_sign_sq.T) != 0) # AND
+    if logic == 'OR':
+        nonzero = ((active_sign_sq + active_sign_sq.T) != 0) # OR
+    elif logic == 'AND':
+        nonzero = ((active_sign_sq * active_sign_sq.T) != 0) # AND
     return nonzero
 
 def conditional_inference(X, nonzero):
@@ -285,23 +287,42 @@ def get_coverage(nonzero, intervals, prec, n, p, scale=True):
                     coverage[i,j] = 0
     return coverage
 
+## TODO: TEST
 ## Naive inference implementations
-def naive_inference(X, prec, weights_const=1., true_nonzero=None):
+def naive_inference(X, prec, weights_const=1., true_nonzero=None, logic = 'OR',
+                    solve_only=False, continued=False, nonzero_cont=None):
+    """
+    solve_only: Logical value, determine whether we only want to see
+                if this data gives nonzero selection
+    continued: If the first run of this function on a data X is solve_only,
+                then we set continued to True so that the programs continues
+                the selected edges from the previous run
+    """
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
-    n,p = X.shape
+    n, p = X.shape
     # rescale X and prec
     X = X / np.sqrt(n)
     prec = prec * n
 
-    if true_nonzero is not None:
-        print("True nonzero used")
-        nonzero=true_nonzero
-    else:
-        print("E estimated")
-        nbd_instance = nbd_lasso.gaussian(X, n_scaled=True, weights_const=weights_const)
-        active_signs_nonrandom = nbd_instance.fit(perturb=np.zeros((p,p-1)))
-        nonzero = get_nonzero(active_signs_nonrandom)
+    if not continued:
+        if true_nonzero is not None:
+            print("True nonzero used")
+            nonzero=true_nonzero
+        else:
+            print("E estimated")
+            nbd_instance = nbd_lasso.gaussian(X, n_scaled=True, weights_const=weights_const)
+            active_signs_nonrandom = nbd_instance.fit(perturb=np.zeros((p,p-1)))
+            nonzero = get_nonzero(active_signs_nonrandom, logic = logic)
+
+    # If we only need to solve the Lasso
+    if solve_only:
+        return nonzero
+
+    # If we continue a previous run with a nontrivial selection
+    if continued:
+        nonzero = nonzero_cont
+        assert nonzero.sum() > 0
 
     # Construct intervals
     if nonzero.sum() > 0:
@@ -323,16 +344,21 @@ def naive_inference(X, prec, weights_const=1., true_nonzero=None):
         return nonzero, intervals, cov_rate, avg_len
     return None, None, None, None
 
-def data_splitting(X, prec, weights_const=1., proportion=0.5):
+## TODO: TEST
+def data_splitting(X, prec, weights_const=1., proportion=0.5, logic = 'OR',
+                   solve_only=False, continued=False, nonzero_cont=None, subset_cont=None):
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
     n,p = X.shape
     pi_s = proportion
-    subset_select = np.zeros(n, np.bool_)
-    subset_select[:int(pi_s * n)] = True
+    if not continued:
+        subset_select = np.zeros(n, np.bool_)
+        subset_select[:int(pi_s * n)] = True
+        np.random.shuffle(subset_select)
+    else:
+        subset_select = subset_cont
     n1 = subset_select.sum()
     n2 = n - n1
-    np.random.shuffle(subset_select)
 
     # Rescale X_S and X_NS for numerical stability
     X_S = X[subset_select, :] / np.sqrt(n1)
@@ -340,8 +366,17 @@ def data_splitting(X, prec, weights_const=1., proportion=0.5):
 
     nbd_instance = nbd_lasso.gaussian(X_S, n_scaled=True, weights_const=weights_const)
     active_signs_nonrandom = nbd_instance.fit(perturb=np.zeros((p,p-1)))
-    nonzero = get_nonzero(active_signs_nonrandom)
+    nonzero = get_nonzero(active_signs_nonrandom, logic = logic)
     # print("Data Splitting |E|:", nonzero.sum())
+
+    # If we only need to solve the Lasso
+    if solve_only:
+        return nonzero, subset_select
+
+    # If we continue a previous run with a nontrivial selection
+    if continued:
+        nonzero = nonzero_cont
+        assert nonzero.sum() > 0
 
     # Construct intervals
     if nonzero.sum() > 0:
@@ -379,6 +414,21 @@ def print_nonzero_intervals(nonzero, intervals, prec, X, condlDists):
                              condlDists[(i, j)].pdf(theta=n*prec[i,j]))
                     plt.title("(" + str(i) + "," + str(j)  + ")")
                     plt.show()
+
+
+# TODO: TEST
+## A function that determines the selected edges based on whether
+## the post-selection intervals, no matter valid or not,
+## includes zero
+def interval_selection(intervals, nonzero):
+    p = intervals.shape[0]
+    intv_nonzero = np.zeros((p,p))
+    for i in range(p):
+        for j in range(p):
+            if i != j and nonzero[i,j]:
+                # select an edge if its
+                intv_nonzero[i,j] = ( (intervals[i,j,0] * intervals[i,j,1]) > 0 )
+    return intv_nonzero
 
 
 def calculate_F1_score_graph(beta_true, selection):
