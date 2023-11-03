@@ -340,4 +340,4 @@ if __name__ == '__main__':
     # logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations(range_=range(start, end))#, logic_tf=logic_tf, s=s)
+    nbd_simulations_logic(range_=range(start, end))#, logic_tf=logic_tf, s=s)
