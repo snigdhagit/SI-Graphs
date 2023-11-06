@@ -61,11 +61,12 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
 
 
 def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
-                         n_iter=30):
+                         n_iter=10):
     # Operating characteristics
     oper_char = {}
+    oper_char["n,p"] = []
     #oper_char["p"] = []
-    oper_char["ncoarse"] = []
+    #oper_char["ncoarse"] = []
     oper_char["coverage rate"] = []
     oper_char["avg length"] = []
     oper_char["method"] = []
@@ -73,12 +74,15 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
 
-    #for p in [10, 20, 50]:#, 20, 30]:
-    for ncoarse in [50, 100, 200]:
-        p = 50
-        weights_const = 1.
+    for np_pair in [(200,10), (400,20), (1000,50)]:#, 20, 30]:
+        n = np_pair[0]
+        p = np_pair[1]
+        print(n,p)
+        #for ncoarse in [50, 100, 200]:
+        weights_const = 0.5
         ridge_const = 1.
         randomizer_scale = 1.
+        ncoarse=200
         logic = 'OR'
 
         for i in range(n_iter):
@@ -88,7 +92,7 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=1000, p=p, max_edges=4)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=4, signal=0.5)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
@@ -161,8 +165,9 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
                     F1_pi_approx = calculate_F1_score_graph(prec, selection=nonzero_approx_int)
 
                     # Data splitting coverage
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     #oper_char["p"].append(p)
-                    oper_char["ncoarse"].append(ncoarse)
+                    #oper_char["ncoarse"].append(ncoarse)
                     oper_char["E size"].append(nonzero_ds.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_ds))
                     oper_char["avg length"].append(np.mean(avg_len_ds))
@@ -171,8 +176,9 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
                     oper_char["method"].append('Data Splitting')
 
                     # Naive coverage
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     #oper_char["p"].append(p)
-                    oper_char["ncoarse"].append(ncoarse)
+                    #oper_char["ncoarse"].append(ncoarse)
                     oper_char["E size"].append(nonzero_n.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_n))
                     oper_char["avg length"].append(np.mean(avg_len_n))
@@ -181,8 +187,9 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
                     oper_char["method"].append('Naive')
 
                     # Approximate Inference coverage
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     #oper_char["p"].append(p)
-                    oper_char["ncoarse"].append(ncoarse)
+                    #oper_char["ncoarse"].append(ncoarse)
                     oper_char["E size"].append(nonzero_approx.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_approx))
                     oper_char["avg length"].append(np.mean(avg_len_approx))
@@ -195,21 +202,21 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx.csv', index=False)
+    oper_char_df.to_csv('GGM_naive_ds_approx_np.csv', index=False)
 
     print("Mean coverage rate/length:")
     #print(oper_char_df.groupby(['p', 'method']).mean())
-    print(oper_char_df.groupby(['ncoarse', 'method']).mean())
+    print(oper_char_df.groupby(['n,p', 'method']).mean())
 
     sns.boxplot(y=oper_char_df["coverage rate"],
-                x=oper_char_df["ncoarse"],#x=oper_char_df["p"],
+                x=oper_char_df["n,p"],#x=oper_char_df["p"],
                 hue=oper_char_df["method"],
                 showmeans=True,
                 orient="v")
     plt.show()
 
     len_plot = sns.boxplot(y=oper_char_df["avg length"],
-                           x=oper_char_df["ncoarse"],#x=oper_char_df["p"],
+                           x=oper_char_df["n,p"],#x=oper_char_df["p"],
                            hue=oper_char_df["method"],
                            showmeans=True,
                            orient="v")
@@ -217,7 +224,7 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
     plt.show()
 
     F1_plot = sns.boxplot(y=oper_char_df["F1 score"],
-                          x=oper_char_df["ncoarse"],#x=oper_char_df["p"],
+                          x=oper_char_df["n,p"],#x=oper_char_df["p"],
                           hue=oper_char_df["method"],
                           showmeans=True,
                           orient="v")
@@ -225,14 +232,14 @@ def test_nbd_simulations(n=1000, p=30, max_edges=3, proportion=0.5,
     plt.show()
 
     size_plot = sns.boxplot(y=oper_char_df["E size"],
-                          x=oper_char_df["ncoarse"],#x=oper_char_df["p"],
+                          x=oper_char_df["n,p"],#x=oper_char_df["p"],
                           hue=oper_char_df["method"],
                           showmeans=True,
                           orient="v")
     plt.show()
 
 def test_nbd_simulations_logic(n=1000, p=30, max_edges=3, proportion=0.5,
-                               n_iter=30):
+                               n_iter=50):
     # Operating characteristics
     oper_char = {}
     oper_char["p"] = []
@@ -244,7 +251,7 @@ def test_nbd_simulations_logic(n=1000, p=30, max_edges=3, proportion=0.5,
     oper_char["E size"] = []
 
     for p in [50]:#[10, 20, 50]:
-        weights_const = 0.75
+        weights_const = 0.5
         ridge_const = 1.
         randomizer_scale = 1.
         ncoarse=int(200)
@@ -256,7 +263,7 @@ def test_nbd_simulations_logic(n=1000, p=30, max_edges=3, proportion=0.5,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=1000, p=p, max_edges=4)
+                prec,cov,X = GGM_instance(n=1000, p=p, max_edges=4, signal=0.5)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
@@ -376,7 +383,7 @@ def test_nbd_simulations_logic(n=1000, p=30, max_edges=3, proportion=0.5,
                     oper_char["method"].append('Approx (AND)')
                     # Approximate Inference coverage with OR
                     oper_char["p"].append(p)
-                    oper_char["E size"].append(nonzero_AND.sum())
+                    oper_char["E size"].append(nonzero_OR.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_OR))
                     oper_char["avg length"].append(np.mean(avg_len_OR))
                     oper_char["F1 score"].append(F1_OR)

@@ -4,7 +4,7 @@ from scipy.stats import norm
 def is_invertible(a):
     return a.shape[0] == a.shape[1] and np.linalg.matrix_rank(a) == a.shape[0]
 
-def GGM_instance(n=100, p=100, max_edges=10):
+def GGM_instance(n=100, p=100, max_edges=10, signal=1.):
     def generate_vertices(p):
         vertices = np.random.uniform(size=(p,2))
         return vertices
@@ -58,8 +58,7 @@ def GGM_instance(n=100, p=100, max_edges=10):
     max_off_diag = 1/max_edges
 
     # generate a PD precision
-    precision = (np.random.uniform(size=(p,p), low=0, high=max_off_diag) *
-                 (2 * (np.random.binomial(n=1, p=0.5, size=(p,p))) - 1))
+    precision = np.random.uniform(size=(p,p), low=0, high=max_off_diag*signal)
 
     # precision = max_off_diag * (np.random.binomial(n=1,p=0.5,size=(p, p)) * 2 - 1)
     # symmetrize precision

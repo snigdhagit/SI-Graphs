@@ -186,8 +186,8 @@ def nbd_simulations_logic(n=1000, p=30, max_edges=3, proportion=0.5, range_=rang
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
 
-    for p in [10, 20, 50]:
-        weights_const = 0.75
+    for p in [50]:
+        weights_const = 0.5
         ridge_const = 1.
         randomizer_scale = 1.
         ncoarse=int(200)
