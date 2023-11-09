@@ -75,7 +75,6 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
     oper_char["randomizer scale"] = []
     oper_char["coverage rate"] = []
     oper_char["avg length"] = []
-    oper_char["method"] = []
     oper_char["F1 score"] = []
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
@@ -88,9 +87,12 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
         for i in range(range_.start, range_.stop):
             n_instance = 0
             print(i)
+            weights_const = 0.5
+            ridge_const = 1
+
             # np.random.seed(i)
 
-            tau = [1, 2, 5]
+            tau = [0.5, 1, 2]
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
@@ -143,28 +145,28 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     oper_char["E size"].append(nonzero_1.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_1))
+                    oper_char["randomizer scale"].append(tau[0])
                     oper_char["avg length"].append(np.mean(avg_len_1))
                     oper_char["F1 score"].append(F1_1)
                     oper_char["F1 score (post inf)"].append(F1_pi_1)
-                    oper_char["randomizer scale"].append(tau[0])
 
                     # Second scale coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     oper_char["E size"].append(nonzero_2.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_2))
+                    oper_char["randomizer scale"].append(tau[1])
                     oper_char["avg length"].append(np.mean(avg_len_2))
                     oper_char["F1 score"].append(F1_2)
                     oper_char["F1 score (post inf)"].append(F1_pi_2)
-                    oper_char["randomizer scale"].append(tau[1])
 
                     # Third Inference coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     oper_char["E size"].append(nonzero_3.sum())
                     oper_char["coverage rate"].append(np.mean(cov_rate_3))
+                    oper_char["randomizer scale"].append(tau[2])
                     oper_char["avg length"].append(np.mean(avg_len_3))
                     oper_char["F1 score"].append(F1_3)
                     oper_char["F1 score (post inf)"].append(F1_pi_3)
-                    oper_char["randomizer scale"].append(tau[2])
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
@@ -177,7 +179,7 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
 if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, s]
-    start, end = 0,10#int(argv[1]), int(argv[2])
+    start, end = int(argv[1]), int(argv[2])
     # logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
