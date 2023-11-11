@@ -78,6 +78,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
     oper_char["F1 score"] = []
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
+    oper_char["Cond. power"] = []
+    oper_char["FDP"] = []
 
 
     for np_pair in [(200, 10), (400, 20), (1000, 50)]:  # , 20, 30]:
@@ -97,7 +99,7 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=s)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=s, signal=0.6)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
@@ -170,6 +172,19 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     F1_pi_2 = calculate_F1_score_graph(prec, selection=nonzero_2_int)
                     F1_pi_3 = calculate_F1_score_graph(prec, selection=nonzero_3_int)
 
+                    # Conditional Power post inference
+                    cond_power1 = calculate_cond_power_graph(prec, selection=nonzero_1,
+                                                             selection_CI=nonzero_1_int)
+                    cond_power2 = calculate_cond_power_graph(prec, selection=nonzero_2,
+                                                             selection_CI=nonzero_2_int)
+                    cond_power3 = calculate_cond_power_graph(prec, selection=nonzero_3,
+                                                             selection_CI=nonzero_3_int)
+
+                    # FDP post inference
+                    FDP1 = calculate_FDP_graph(beta_true=prec, selection=nonzero_1_int)
+                    FDP2 = calculate_FDP_graph(beta_true=prec, selection=nonzero_2_int)
+                    FDP3 = calculate_FDP_graph(beta_true=prec, selection=nonzero_3_int)
+
 
                     # First scale coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
@@ -179,6 +194,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     oper_char["avg length"].append(np.mean(avg_len_1))
                     oper_char["F1 score"].append(F1_1)
                     oper_char["F1 score (post inf)"].append(F1_pi_1)
+                    oper_char["Cond. power"].append(cond_power1)
+                    oper_char["FDP"].append(FDP1)
 
                     # Second scale coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
@@ -188,6 +205,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     oper_char["avg length"].append(np.mean(avg_len_2))
                     oper_char["F1 score"].append(F1_2)
                     oper_char["F1 score (post inf)"].append(F1_pi_2)
+                    oper_char["Cond. power"].append(cond_power2)
+                    oper_char["FDP"].append(FDP2)
 
                     # Third Inference coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
@@ -197,20 +216,23 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     oper_char["avg length"].append(np.mean(avg_len_3))
                     oper_char["F1 score"].append(F1_3)
                     oper_char["F1 score (post inf)"].append(F1_pi_3)
+                    oper_char["Cond. power"].append(cond_power3)
+                    oper_char["FDP"].append(FDP3)
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx_vary_omega' + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+    oper_char_df.to_csv('GGM_naive_ds_approx_vary_omega_logic' + str(logic_tf) + '_'
+                        + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 
 if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, s]
-    start, end = 0, 10#int(argv[1]), int(argv[2])
+    start, end = int(argv[1]), int(argv[2])
     # logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=1)#, logic_tf=logic_tf, s=s)
+    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=argv[3])#argv[3])#, logic_tf=logic_tf, s=s)

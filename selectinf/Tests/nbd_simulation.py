@@ -79,6 +79,8 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
     oper_char["F1 score"] = []
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
+    oper_char["Cond. power"] = []
+    oper_char["FDP"] = []
 
     for np_pair in [(200, 10), (400, 20), (1000, 50)]:  # , 20, 30]:
         n = np_pair[0]
@@ -95,7 +97,7 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=s, signal=0.5)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=s, signal=0.6)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
@@ -166,6 +168,20 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     F1_pi_approx = calculate_F1_score_graph(prec, selection=nonzero_approx_int)
 
 
+                    # Conditional Power post inference
+                    cond_power_n = calculate_cond_power_graph(prec, selection=nonzero_n,
+                                                             selection_CI=nonzero_n_int)
+                    cond_power_ds = calculate_cond_power_graph(prec, selection=nonzero_ds,
+                                                             selection_CI=nonzero_ds_int)
+                    cond_power_approx = calculate_cond_power_graph(prec, selection=nonzero_approx,
+                                                             selection_CI=nonzero_approx_int)
+
+                    # FDP post inference
+                    FDP_n = calculate_FDP_graph(beta_true=prec, selection=nonzero_n_int)
+                    FDP_ds = calculate_FDP_graph(beta_true=prec, selection=nonzero_ds_int)
+                    FDP_approx = calculate_FDP_graph(beta_true=prec, selection=nonzero_approx_int)
+
+
                     # Data splitting coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
                     oper_char["E size"].append(nonzero_ds.sum())
@@ -174,6 +190,8 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     oper_char["F1 score"].append(F1_ds)
                     oper_char["F1 score (post inf)"].append(F1_pi_ds)
                     oper_char["method"].append('Data Splitting')
+                    oper_char["Cond. power"].append(cond_power_n)
+                    oper_char["FDP"].append(FDP_n)
 
                     # Naive coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
@@ -183,6 +201,8 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     oper_char["F1 score"].append(F1_n)
                     oper_char["F1 score (post inf)"].append(F1_pi_n)
                     oper_char["method"].append('Naive')
+                    oper_char["Cond. power"].append(cond_power_ds)
+                    oper_char["FDP"].append(FDP_ds)
 
                     # Approximate Inference coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
@@ -192,19 +212,22 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     oper_char["F1 score"].append(F1_approx)
                     oper_char["F1 score (post inf)"].append(F1_pi_approx)
                     oper_char["method"].append('Approx')
+                    oper_char["Cond. power"].append(cond_power_approx)
+                    oper_char["FDP"].append(FDP_approx)
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx_AND' + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+    oper_char_df.to_csv('GGM_naive_ds_approx_logic'+ str(logic_tf) + '_'
+                        + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, s]
-    start, end = 0, 30#int(argv[1]), int(argv[2])
+    start, end = int(argv[1]), int(argv[2])
     # logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations(range_=range(start, end), logic_tf=1)#, logic_tf=logic_tf, s=s)
+    nbd_simulations(range_=range(start, end), logic_tf=argv[3])#, logic_tf=logic_tf, s=s)
