@@ -1,4 +1,4 @@
-p,coverage rate,avg length,method,F1 score,E size
+p,coverage rate,avg length,metod,F1 score,E size
 10,1.0,0.43713448883528866,Data Splitting,0.6666666666666666,8
 10,0.75,0.24917747339222518,Naive,1.0,16
 10,0.5555555555555556,0.3428964975340836,Data Splitting,0.6666666666666666,18

@@ -450,6 +450,38 @@ def calculate_F1_score_graph(beta_true, selection):
     else:
         return 0
 
+# | E^* \cap E_CI | / | E^* \cap E_hat |
+def calculate_cond_power_graph(beta_true, selection, selection_CI):
+    # assert is_sym(selection)
+    nonzero_true = (beta_true != 0)
+    for i in range(nonzero_true.shape[0]):
+        # Remove diagonals
+        nonzero_true[i,i] = False
+
+    # precision & recall
+    if (nonzero_true * selection).sum() > 0:
+        cp = (nonzero_true * selection_CI).sum() / (nonzero_true * selection).sum()
+    else:
+        cp = 0
+
+    return cp
+
+# FDP =  | E^* \cap E_CI | / | E_CI |
+def calculate_FDP_graph(beta_true, selection):
+    # assert is_sym(selection)
+    nonzero_true = (beta_true != 0)
+    for i in range(nonzero_true.shape[0]):
+        # Remove diagonals
+        nonzero_true[i, i] = False
+
+    # precision & recall
+    if selection.sum() > 0:
+        FDP = 1 - (nonzero_true * selection).sum() / selection.sum()
+    else:
+        FDP = 0
+
+    return FDP
+
 
 ## Parallelization
 @timebudget

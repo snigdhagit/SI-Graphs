@@ -89,6 +89,7 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
             print(i)
             weights_const = 0.5
             ridge_const = 1
+            ncoarse = 200
 
             # np.random.seed(i)
 
@@ -101,25 +102,54 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
 
+                nonzero_1, instance_1 = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                             ridge_const=ridge_const,
+                                                             randomizer_scale=tau[0],
+                                                             parallel=False, logic=logic,
+                                                             solve_only=True, continued=False,
+                                                             nbd_instance_cont=None)
+
+                nonzero_2, instance_2 = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                             ridge_const=ridge_const,
+                                                             randomizer_scale=tau[1],
+                                                             parallel=False, logic=logic,
+                                                             solve_only=True, continued=False,
+                                                             nbd_instance_cont=None)
+
+                nonzero_3, instance_3 = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                             ridge_const=ridge_const,
+                                                             randomizer_scale=tau[2],
+                                                             parallel=False, logic=logic,
+                                                             solve_only=True, continued=False,
+                                                             nbd_instance_cont=None)
+
+                noselection = np.min((nonzero_1.sum(), nonzero_2.sum(), nonzero_3.sum())) == 0
+
                 if not noselection:
                     nonzero_1, intervals_1, cov_rate_1, avg_len_1 \
-                        = approx_inference_sim(X, prec, weights_const=0.5,
-                                               ridge_const=1., randomizer_scale=tau[0],
-                                               parallel=False, logic=logic, ncoarse=200)
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=tau[0],
+                                               parallel=False, logic=logic,
+                                               solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_1, ncoarse=ncoarse)
                     noselection = (nonzero_1 is None)
 
                 if not noselection:
                     nonzero_2, intervals_2, cov_rate_2, avg_len_2 \
-                        = approx_inference_sim(X, prec, weights_const=0.5,
-                                               ridge_const=1., randomizer_scale=tau[1],
-                                               parallel=False, logic=logic, ncoarse=200)
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=tau[1],
+                                               parallel=False, logic=logic,
+                                               solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_2, ncoarse=ncoarse)
                     noselection = (nonzero_2 is None)
 
                 if not noselection:
                     nonzero_3, intervals_3, cov_rate_3, avg_len_3 \
-                        = approx_inference_sim(X, prec, weights_const=0.5,
-                                               ridge_const=1., randomizer_scale=tau[2],
-                                               parallel=False, logic=logic, ncoarse=200)
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=tau[2],
+                                               parallel=False, logic=logic,
+                                               solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_3, ncoarse=ncoarse)
                     noselection = (nonzero_3 is None)
                     # print(nonzero_ds.shape)
 
@@ -179,8 +209,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
 if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, s]
-    start, end = int(argv[1]), int(argv[2])
+    start, end = 0, 10#int(argv[1]), int(argv[2])
     # logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations_vary_omega(range_=range(start, end))#, logic_tf=logic_tf, s=s)
+    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=1)#, logic_tf=logic_tf, s=s)

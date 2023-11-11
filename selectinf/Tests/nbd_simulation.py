@@ -84,6 +84,11 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
         n = np_pair[0]
         p = np_pair[1]
         print(n, p)
+        weights_const = 0.5
+        ridge_const = 1.
+        randomizer_scale = 1.
+        ncoarse = 200
+
         for i in range(range_.start, range_.stop):
             n_instance = 0
             print(i)
@@ -95,33 +100,53 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
 
+                nonzero_n = naive_inference(X, prec, weights_const=weights_const,
+                                            true_nonzero=None, logic=logic,
+                                            solve_only=True, continued=False, nonzero_cont=None)
+
+                nonzero_ds, subset_select = data_splitting(X, prec, weights_const=weights_const, proportion=proportion,
+                                                           logic=logic, solve_only=True, continued=False,
+                                                           nonzero_cont=None, subset_cont=None)
+
+                noselection = np.min((nonzero_n.sum(), nonzero_ds.sum())) == 0
                 if not noselection:
-                    true_non0 = (prec!=0)
+                    nonzero_approx, instance_approx = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                                           ridge_const=ridge_const,
+                                                                           randomizer_scale=randomizer_scale,
+                                                                           parallel=False, logic=logic,
+                                                                           solve_only=True, continued=False,
+                                                                           nbd_instance_cont=None)
+
+                    noselection = np.min((nonzero_n.sum(), nonzero_ds.sum(), nonzero_approx.sum())) == 0
+
+                # Continue with simultaneously nonzero instance
+                if not noselection:
+                    # Naive inference
+                    true_non0 = (prec != 0)
                     for j in range(prec.shape[0]):
-                        true_non0[j,j] = False
+                        true_non0[j, j] = False
                     print("Naive")
-                    nonzero_n, intervals_n, cov_rate_n, avg_len_n\
-                        = naive_inference(X, prec, weights_const=0.5,
-                                          logic=logic)
-                    noselection = (nonzero_n is None)
+                    nonzero_n, intervals_n, cov_rate_n, avg_len_n = naive_inference(X, prec,
+                                                                                    weights_const=weights_const,
+                                                                                    true_nonzero=None, logic=logic,
+                                                                                    solve_only=False, continued=True,
+                                                                                    nonzero_cont=nonzero_n)
 
-                if not noselection:
-                    print("DS")
-                    nonzero_ds, intervals_ds, cov_rate_ds, avg_len_ds\
-                        = data_splitting(X, prec, weights_const=0.5,
-                                         proportion=proportion, logic=logic)
-                    noselection = (nonzero_ds is None)
-                    if not noselection:
-                        print("DS Length:", avg_len_ds)
+                    # Data splitting
+                    nonzero_ds, intervals_ds, cov_rate_ds, avg_len_ds = data_splitting(X, prec,
+                                                                                       weights_const=weights_const,
+                                                                                       proportion=proportion,
+                                                                                       logic=logic, solve_only=False,
+                                                                                       continued=True,
+                                                                                       nonzero_cont=nonzero_ds,
+                                                                                       subset_cont=subset_select)
 
-                if not noselection:
-                    print("Approx")
+                    # Approximate inference
                     nonzero_approx, intervals_approx, cov_rate_approx, avg_len_approx \
-                        = approx_inference_sim(X, prec, weights_const=0.5,
-                                               ridge_const=1., randomizer_scale=1.,
-                                               parallel=False, logic=logic)
-                    noselection = (nonzero_approx is None)
-                    # print(nonzero_ds.shape)
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=randomizer_scale,
+                                               parallel=False, logic=logic, solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_approx, ncoarse=ncoarse)
 
                 if not noselection:
                     # F1 scores
@@ -173,7 +198,7 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx_OR' + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+    oper_char_df.to_csv('GGM_naive_ds_approx_AND' + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 if __name__ == '__main__':
     argv = sys.argv
@@ -182,4 +207,4 @@ if __name__ == '__main__':
     # logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations(range_=range(start, end), logic_tf=0)#, logic_tf=logic_tf, s=s)
+    nbd_simulations(range_=range(start, end), logic_tf=1)#, logic_tf=logic_tf, s=s)
