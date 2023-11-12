@@ -99,13 +99,13 @@ class discrete_family(object):
         -----
         The weights are normalized to sum to 1.
         """
-        xw = np.array(sorted(zip(sufficient_stat, weights)), np.float)
+        xw = np.array(sorted(zip(sufficient_stat, weights)), float)
         self._x = xw[:, 0]
         self._w = xw[:, 1]
         if logweights is not None:
             # If log weights is passed to the initializer to avoid loss
             # of precision due to taking exp and log of the weights
-            x_lw = np.array(sorted(zip(sufficient_stat, logweights)), np.float)
+            x_lw = np.array(sorted(zip(sufficient_stat, logweights)), float)
             self._lw = x_lw[:, 1]
         else:
             self._lw = np.log(xw[:, 1])
