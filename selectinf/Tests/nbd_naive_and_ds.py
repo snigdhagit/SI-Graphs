@@ -438,6 +438,9 @@ def calculate_F1_score_graph(beta_true, selection):
         # Remove diagonals
         nonzero_true[i,i] = False
 
+    nonzero_true = np.triu(nonzero_true)
+    selection = np.triu(selection)
+
     # precision & recall
     if selection.sum() > 0:
         precision = (nonzero_true * selection).sum() / selection.sum()
@@ -458,6 +461,10 @@ def calculate_cond_power_graph(beta_true, selection, selection_CI):
         # Remove diagonals
         nonzero_true[i,i] = False
 
+    nonzero_true = np.triu(nonzero_true)
+    selection = np.triu(selection)
+    selection_CI = np.triu(selection_CI)
+
     # precision & recall
     if (nonzero_true * selection).sum() > 0:
         cp = (nonzero_true * selection_CI).sum() / (nonzero_true * selection).sum()
@@ -473,6 +480,9 @@ def calculate_FDP_graph(beta_true, selection):
     for i in range(nonzero_true.shape[0]):
         # Remove diagonals
         nonzero_true[i, i] = False
+
+    nonzero_true = np.triu(nonzero_true)
+    selection = np.triu(selection)
 
     # precision & recall
     if selection.sum() > 0:

@@ -20,7 +20,7 @@ from selectinf.Tests.instance import GGM_instance
 from selectinf.Tests.nbd_naive_and_ds import *
 
 def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_scale=1.,
-                         parallel=False, logic = 'OR', ncoarse=200,
+                         parallel=False, ncores=4, logic = 'OR', ncoarse=200,
                          solve_only=False, continued=False, nbd_instance_cont=None):
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
@@ -45,7 +45,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     # Construct intervals
     if nonzero.sum() > 0:
         # Intervals returned is in its original (unscaled) order
-        intervals = nbd_instance.inference(parallel=parallel, ncoarse=ncoarse)
+        intervals = nbd_instance.inference(parallel=parallel, ncoarse=ncoarse, ncores=ncores)
         # coverage is upper-triangular
         coverage = get_coverage(nonzero, intervals, prec, n, p, scale=False)
         interval_len = 0
@@ -62,7 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
+def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
         logic = 'OR'
@@ -107,22 +107,22 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                 nonzero_1, instance_1 = approx_inference_sim(X, prec, weights_const=weights_const,
                                                              ridge_const=ridge_const,
                                                              randomizer_scale=tau[0],
-                                                             parallel=False, logic=logic,
-                                                             solve_only=True, continued=False,
+                                                             parallel=False,
+                                                             logic=logic, solve_only=True, continued=False,
                                                              nbd_instance_cont=None)
 
                 nonzero_2, instance_2 = approx_inference_sim(X, prec, weights_const=weights_const,
                                                              ridge_const=ridge_const,
                                                              randomizer_scale=tau[1],
-                                                             parallel=False, logic=logic,
-                                                             solve_only=True, continued=False,
+                                                             parallel=False,
+                                                             logic=logic, solve_only=True, continued=False,
                                                              nbd_instance_cont=None)
 
                 nonzero_3, instance_3 = approx_inference_sim(X, prec, weights_const=weights_const,
                                                              ridge_const=ridge_const,
                                                              randomizer_scale=tau[2],
-                                                             parallel=False, logic=logic,
-                                                             solve_only=True, continued=False,
+                                                             parallel=False,
+                                                             logic=logic, solve_only=True, continued=False,
                                                              nbd_instance_cont=None)
 
                 noselection = np.min((nonzero_1.sum(), nonzero_2.sum(), nonzero_3.sum())) == 0
@@ -131,8 +131,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     nonzero_1, intervals_1, cov_rate_1, avg_len_1 \
                         = approx_inference_sim(X, prec, weights_const=weights_const,
                                                ridge_const=ridge_const, randomizer_scale=tau[0],
-                                               parallel=False, logic=logic,
-                                               solve_only=False, continued=True,
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
                                                nbd_instance_cont=instance_1, ncoarse=ncoarse)
                     noselection = (nonzero_1 is None)
 
@@ -140,8 +140,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     nonzero_2, intervals_2, cov_rate_2, avg_len_2 \
                         = approx_inference_sim(X, prec, weights_const=weights_const,
                                                ridge_const=ridge_const, randomizer_scale=tau[1],
-                                               parallel=False, logic=logic,
-                                               solve_only=False, continued=True,
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
                                                nbd_instance_cont=instance_2, ncoarse=ncoarse)
                     noselection = (nonzero_2 is None)
 
@@ -149,8 +149,8 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100)):
                     nonzero_3, intervals_3, cov_rate_3, avg_len_3 \
                         = approx_inference_sim(X, prec, weights_const=weights_const,
                                                ridge_const=ridge_const, randomizer_scale=tau[2],
-                                               parallel=False, logic=logic,
-                                               solve_only=False, continued=True,
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
                                                nbd_instance_cont=instance_3, ncoarse=ncoarse)
                     noselection = (nonzero_3 is None)
                     # print(nonzero_ds.shape)
@@ -233,6 +233,7 @@ if __name__ == '__main__':
     # argv = [..., start, end, logic_tf, s]
     start, end = int(argv[1]), int(argv[2])
     logic_tf = int(argv[3])
+    ncores = int(argv[4])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=logic_tf)#argv[3])#, logic_tf=logic_tf, s=s)
+    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=logic_tf, ncores=ncores)#argv[3])#, logic_tf=logic_tf, s=s)

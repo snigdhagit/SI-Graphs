@@ -184,8 +184,7 @@ class nbd_lasso(object):
                          observed_subgrad=self.observed_subgrad,
                          observed_soln=self.observed_soln)
 
-    def inference(self, level=0.9, parallel=True, ncoarse=100):
-
+    def inference(self, level=0.9, parallel=True, ncoarse=100, ncores=4):
         query_spec = self.specification
         nonzero = query_spec.nonzero
 
@@ -203,7 +202,7 @@ class nbd_lasso(object):
                 for j in range(i + 1, p):
                     if nonzero[i, j]:
                         task_idx.append((i, j))
-            with Pool() as pool:
+            with Pool(ncores) as pool:
                 results = pool.map(partial(approx_inference, X_n=X_n, query_spec=query_spec,
                                            n=n, p=p, ngrid=10000, ncoarse=ncoarse, level=level),
                                    task_idx)
