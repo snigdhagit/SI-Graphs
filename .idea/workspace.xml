@@ -5,8 +5,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx0_10.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx0_100.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx10_20.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx20_30.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx30_40.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx40_50.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_OR0_30.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np0_25.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np100_125.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np175_200.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np250_275.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np350_375.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np375_400.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np50_75.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GGM_naive_ds_approx_np75_100.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/f2py3.6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/iptest" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/iptest3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/pip-3.6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/pip3.6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/python3.6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/wheel-3.6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/bin/wheel3.6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/1.6c3ab69171002cbfa04f.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/18.c8564428e319611ea7ca.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/243.6c384ff2649ef572a18a.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/272.2c7a2a1ef6d577414e03.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/279.aa88a78c8bf62c65db54.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/466.945e1b424e1e7aee9b6f.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/523.6e13edd0a9dd3788d5ec.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/638.f3e5e34a28f3334d4f08.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/638.f3e5e34a28f3334d4f08.js.LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/803.b7b75bd6e7977a648c67.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/86.6029f79ecf3c78f6bbb4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/95.b5a5ff10000a6051fa99.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/95.b5a5ff10000a6051fa99.js.LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/jupyter/labextensions/@jupyter-widgets/jupyterlab-manager/static/remoteEntry.0b8e2191f8a05e206e81.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env3/share/man/man1/ipython.1.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/get-pip.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/selectinf/.ipynb_checkpoints/nbd_lasso_notebook-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +255,7 @@
       <workItem from="1698607320006" duration="13020000" />
       <workItem from="1698861950745" duration="27998000" />
       <workItem from="1699231007652" duration="3874000" />
-      <workItem from="1699403441033" duration="40413000" />
+      <workItem from="1699403441033" duration="40671000" />
     </task>
     <servers />
   </component>
