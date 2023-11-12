@@ -232,7 +232,7 @@ if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, s]
     start, end = int(argv[1]), int(argv[2])
-    # logic_tf = int(argv[3])
+    logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=argv[3])#argv[3])#, logic_tf=logic_tf, s=s)
+    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=logic_tf)#argv[3])#, logic_tf=logic_tf, s=s)
