@@ -1,14 +1,14 @@
 from __future__ import print_function
 
+import sys
+# For greatlakes simulations
+sys.path.append('/home/yilingh/SI-Graphs')
 import numpy as np
 import pandas as pd
 import random
 import nose.tools as nt
 import collections
 collections.Callable = collections.abc.Callable
-import sys
-# For greatlakes simulations
-sys.path.append('/home/yilingh/SI-Graphs')
 
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -64,11 +64,15 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
 
 def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     range_=range(0, 100)):
+    print(logic_tf)
+    print(logic_tf == 0)
+    print(logic_tf == 1)
     # Encoding binary logic into str
     if logic_tf == 0:
         logic = 'OR'
     elif logic_tf == 1:
         logic = 'AND'
+    print(logic)
 
     # Operating characteristics
     oper_char = {}
@@ -227,7 +231,8 @@ if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, s]
     start, end = int(argv[1]), int(argv[2])
-    # logic_tf = int(argv[3])
+    logic_tf = int(argv[3])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations(range_=range(start, end), logic_tf=argv[3])#, logic_tf=logic_tf, s=s)
+    print(argv[3])
+    nbd_simulations(range_=range(start, end), logic_tf=logic_tf)#, logic_tf=logic_tf, s=s)
