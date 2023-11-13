@@ -20,7 +20,7 @@ from selectinf.Tests.instance import GGM_instance
 from selectinf.Tests.nbd_naive_and_ds import *
 
 def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_scale=1.,
-                         parallel=False, logic = 'OR', ncoarse=200,
+                         parallel=False, ncores=4, logic = 'OR', ncoarse=200,
                          solve_only=False, continued=False, nbd_instance_cont=None):
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
@@ -45,7 +45,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     # Construct intervals
     if nonzero.sum() > 0:
         # Intervals returned is in its original (unscaled) order
-        intervals = nbd_instance.inference(parallel=parallel, ncoarse=ncoarse)
+        intervals = nbd_instance.inference(parallel=parallel, ncoarse=ncoarse, ncores=ncores)
         # coverage is upper-triangular
         coverage = get_coverage(nonzero, intervals, prec, n, p, scale=False)
         interval_len = 0
@@ -63,16 +63,12 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
 
 
 def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
-                    range_=range(0, 100)):
-    print(logic_tf)
-    print(logic_tf == 0)
-    print(logic_tf == 1)
+                    range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
         logic = 'OR'
     elif logic_tf == 1:
         logic = 'AND'
-    print(logic)
 
     # Operating characteristics
     oper_char = {}
@@ -151,7 +147,8 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     nonzero_approx, intervals_approx, cov_rate_approx, avg_len_approx \
                         = approx_inference_sim(X, prec, weights_const=weights_const,
                                                ridge_const=ridge_const, randomizer_scale=randomizer_scale,
-                                               parallel=False, logic=logic, solve_only=False, continued=True,
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
                                                nbd_instance_cont=instance_approx, ncoarse=ncoarse)
 
                 if not noselection:
@@ -232,7 +229,7 @@ if __name__ == '__main__':
     # argv = [..., start, end, logic_tf, s]
     start, end = int(argv[1]), int(argv[2])
     logic_tf = int(argv[3])
+    ncores = int(argv[4])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    print(argv[3])
-    nbd_simulations(range_=range(start, end), logic_tf=logic_tf)#, logic_tf=logic_tf, s=s)
+    nbd_simulations(range_=range(start, end), logic_tf=logic_tf, ncores=ncores)#, logic_tf=logic_tf, s=s)
