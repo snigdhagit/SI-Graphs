@@ -133,7 +133,7 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100), ncores=4):
                                                ridge_const=ridge_const, randomizer_scale=tau[0],
                                                parallel=True, ncores=ncores,
                                                logic=logic, solve_only=False, continued=True,
-                                               nbd_instance_cont=instance_1, ncoarse=ncoarse)
+                                               nbd_instance_cont=instance_1, ncoarse=500)
                     noselection = (nonzero_1 is None)
 
                 if not noselection:
