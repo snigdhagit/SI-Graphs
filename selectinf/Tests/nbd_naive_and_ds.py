@@ -492,6 +492,20 @@ def calculate_FDP_graph(beta_true, selection):
 
     return FDP
 
+def calculate_power_graph(beta_true, selection):
+    nonzero_true = (beta_true != 0)
+    for i in range(nonzero_true.shape[0]):
+        # Remove diagonals
+        nonzero_true[i, i] = False
+
+    nonzero_true = np.triu(nonzero_true)
+    selection = np.triu(selection)
+
+    # power
+    power = (nonzero_true * selection).sum() / nonzero_true.sum()
+
+    return power
+
 
 ## Parallelization
 @timebudget

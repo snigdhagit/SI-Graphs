@@ -62,8 +62,8 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
-                    range_=range(0, 100), ncores=4):
+def nbd_simulations(m=4, proportion=0.5, logic_tf=0,
+                    range_=range(0, 100), ncores=4, fix_np=True):
     # Encoding binary logic into str
     if logic_tf == 0:
         logic = 'OR'
@@ -79,13 +79,20 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
     oper_char["F1 score"] = []
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
+    # oper_char["Selection power"] = []
     oper_char["Cond. power"] = []
+    # oper_char["Power post inf"] = []
     oper_char["FDP"] = []
 
-    for np_pair in [(200, 10), (400, 20), (1000, 50)]:  # , 20, 30]:
+    if fix_np:
+        np_list = [(400, 20)]
+    else:
+        np_list = [(200, 10), (400, 20), (1000, 50)]
+
+    for np_pair in np_list:
         n = np_pair[0]
         p = np_pair[1]
-        print(n, p)
+        ## print(n, p)
         weights_const = 0.5
         ridge_const = 1.
         randomizer_scale = 1.
@@ -97,7 +104,7 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=s, signal=0.6)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.6)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
@@ -221,8 +228,12 @@ def nbd_simulations(s=4, proportion=0.5, logic_tf=0,
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx_logic'+ str(logic_tf) + '_'
-                        + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+    if fix_np:
+        oper_char_df.to_csv('GGM_naive_ds_approx_logic' + str(logic_tf) + '_n400_p20_'
+                            + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+    else:
+        oper_char_df.to_csv('GGM_naive_ds_approx_logic'+ str(logic_tf) + '_'
+                            + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 if __name__ == '__main__':
     argv = sys.argv
