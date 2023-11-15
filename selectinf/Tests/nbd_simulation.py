@@ -237,10 +237,16 @@ def nbd_simulations(m=4, proportion=0.5, logic_tf=0,
 
 if __name__ == '__main__':
     argv = sys.argv
-    # argv = [..., start, end, logic_tf, s]
+    # argv = [..., start, end, logic_tf, ncores, fixnp]
     start, end = int(argv[1]), int(argv[2])
     logic_tf = int(argv[3])
     ncores = int(argv[4])
+    fixnp = int(argv[5])
+    if fixnp == 1:
+        fixnp = True
+    else:
+        fixnp = False
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations(range_=range(start, end), logic_tf=logic_tf, ncores=ncores)#, logic_tf=logic_tf, s=s)
+    nbd_simulations(range_=range(start, end), logic_tf=logic_tf,
+                    ncores=ncores, fix_np=fixnp)#, logic_tf=logic_tf, s=s)
