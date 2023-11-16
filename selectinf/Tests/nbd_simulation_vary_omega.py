@@ -230,7 +230,7 @@ def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100), ncores=4):
 
 if __name__ == '__main__':
     argv = sys.argv
-    # argv = [..., start, end, logic_tf, s]
+    # argv = [..., start, end, logic_tf, s] 
     start, end = int(argv[1]), int(argv[2])
     logic_tf = int(argv[3])
     ncores = int(argv[4])
