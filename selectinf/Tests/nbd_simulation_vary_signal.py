@@ -214,7 +214,7 @@ if __name__ == '__main__':
     # argv = [..., start, end, logic_tf, ncores]
     start, end = int(argv[1]), int(argv[2])
     logic_tf = int(argv[3])
-    ncores = int(argv[4])
+    ncores = int(argv[4]) 
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
     nbd_simulations_vary_signal(range_=range(start, end), logic_tf=logic_tf,

@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_omega.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_omega.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/plotting.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/plotting.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,7 +226,7 @@
       <workItem from="1699403441033" duration="51523000" />
       <workItem from="1699828358230" duration="4782000" />
       <workItem from="1699979973636" duration="1082000" />
-      <workItem from="1700079496528" duration="10969000" />
+      <workItem from="1700079496528" duration="12409000" />
     </task>
     <servers />
   </component>
