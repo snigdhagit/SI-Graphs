@@ -215,7 +215,7 @@ def nbd_simulations_vary_omega(m=4, logic_tf=1, range_=range(0, 100),
                     break  # Go to next iteration if we have some selection
 
     oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_naive_ds_approx_vary_omega_logic' + str(logic_tf) + '_'
+    oper_char_df.to_csv('GGM_vary_omega_logic' + str(logic_tf) + '_'
                         + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 
