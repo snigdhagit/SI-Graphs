@@ -62,8 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_omega(m=4, logic_tf=1, range_=range(0, 100),
-                               ncores=4, fix_np=True):
+def nbd_simulations_vary_omega(s=4, logic_tf=1, range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
         logic = 'OR'
@@ -79,17 +78,11 @@ def nbd_simulations_vary_omega(m=4, logic_tf=1, range_=range(0, 100),
     oper_char["F1 score"] = []
     oper_char["F1 score (post inf)"] = []
     oper_char["E size"] = []
-    oper_char["Selection power"] = []
     oper_char["Cond. power"] = []
-    oper_char["Power post inf"] = []
     oper_char["FDP"] = []
 
-    if fix_np:
-        np_list = [(400, 20)]
-    else:
-        np_list = [(200, 10), (400, 20), (1000, 50)]
 
-    for np_pair in np_list:
+    for np_pair in [(200, 10), (400, 20), (1000, 50)]:  # , 20, 30]:
         n = np_pair[0]
         p = np_pair[1]
         print(n, p)
@@ -98,117 +91,133 @@ def nbd_simulations_vary_omega(m=4, logic_tf=1, range_=range(0, 100),
             print(i)
             weights_const = 0.5
             ridge_const = 1
-            ncoarse = 50
+            ncoarse = 200
 
             # np.random.seed(i)
 
-            # Vary randomizer scale from 0.5 to 5 on an equi-spaced grid
-            tau = np.array([0.5, 1, 2, 3, 4])
+            tau = [0.5, 1, 2]
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.6)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=s, signal=0.6)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
 
-                nonzeros = []
-                instances = []
-                nonzero_sums = []
+                nonzero_1, instance_1 = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                             ridge_const=ridge_const,
+                                                             randomizer_scale=tau[0],
+                                                             parallel=False,
+                                                             logic=logic, solve_only=True, continued=False,
+                                                             nbd_instance_cont=None)
 
-                for k in range(tau.shape[0]):
-                    nonzero_k, instance_k = approx_inference_sim(X, prec, weights_const=weights_const,
-                                                                 ridge_const=ridge_const,
-                                                                 randomizer_scale=tau[k],
-                                                                 parallel=False,
-                                                                 logic=logic, solve_only=True, continued=False,
-                                                                 nbd_instance_cont=None)
-                    nonzeros.append(nonzero_k)
-                    instances.append(instance_k)
-                    nonzero_sums.append(nonzero_k.sum())
+                nonzero_2, instance_2 = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                             ridge_const=ridge_const,
+                                                             randomizer_scale=tau[1],
+                                                             parallel=False,
+                                                             logic=logic, solve_only=True, continued=False,
+                                                             nbd_instance_cont=None)
 
-                noselection = np.min(nonzero_sums) == 0
+                nonzero_3, instance_3 = approx_inference_sim(X, prec, weights_const=weights_const,
+                                                             ridge_const=ridge_const,
+                                                             randomizer_scale=tau[2],
+                                                             parallel=False,
+                                                             logic=logic, solve_only=True, continued=False,
+                                                             nbd_instance_cont=None)
 
-                if not noselection:
-                    nonzeros = []
-                    intervals = []
-                    cov_rates = []
-                    avg_lens = []
-                    for k in range(tau.shape[0]):
-                        if not noselection:
-                            nonzero_k, intervals_k, cov_rate_k, avg_len_k \
-                                = approx_inference_sim(X, prec, weights_const=weights_const,
-                                                       ridge_const=ridge_const, randomizer_scale=tau[k],
-                                                       parallel=True, ncores=ncores,
-                                                       logic=logic, solve_only=False, continued=True,
-                                                       nbd_instance_cont=instances[k], ncoarse=ncoarse)
-                            nonzeros.append(nonzero_k)
-                            intervals.append(intervals_k)
-                            cov_rates.append(cov_rate_k)
-                            avg_lens.append(avg_len_k)
-                            noselection = (nonzero_k is None)
+                noselection = np.min((nonzero_1.sum(), nonzero_2.sum(), nonzero_3.sum())) == 0
 
                 if not noselection:
-                    # Collect values shared across scales
-                    # First scale coverage
-                    for k in range(tau.shape[0]):
-                        oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
+                    nonzero_1, intervals_1, cov_rate_1, avg_len_1 \
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=tau[0],
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_1, ncoarse=500)
+                    noselection = (nonzero_1 is None)
 
+                if not noselection:
+                    nonzero_2, intervals_2, cov_rate_2, avg_len_2 \
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=tau[1],
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_2, ncoarse=ncoarse)
+                    noselection = (nonzero_2 is None)
+
+                if not noselection:
+                    nonzero_3, intervals_3, cov_rate_3, avg_len_3 \
+                        = approx_inference_sim(X, prec, weights_const=weights_const,
+                                               ridge_const=ridge_const, randomizer_scale=tau[2],
+                                               parallel=True, ncores=ncores,
+                                               logic=logic, solve_only=False, continued=True,
+                                               nbd_instance_cont=instance_3, ncoarse=ncoarse)
+                    noselection = (nonzero_3 is None)
+                    # print(nonzero_ds.shape)
+
+                if not noselection:
                     # F1 scores
                     # Post-inference selection
-                    nonzero_ints = []
-                    for k in range(tau.shape[0]):
-                        nonzero_k_int = interval_selection(intervals[k], nonzeros[k])
-                        nonzero_ints.append(nonzero_k_int)
+                    nonzero_1_int = interval_selection(intervals_1, nonzero_1)
+                    nonzero_2_int = interval_selection(intervals_2, nonzero_2)
+                    nonzero_3_int = interval_selection(intervals_3, nonzero_3)
 
                     # Selection F1-score
-                    F1s = []
-                    for k in range(tau.shape[0]):
-                        F1_k = calculate_F1_score_graph(prec, selection=nonzeros[k])
-                        F1s.append(F1_k)
+                    F1_1 = calculate_F1_score_graph(prec, selection=nonzero_1)
+                    F1_2 = calculate_F1_score_graph(prec, selection=nonzero_2)
+                    F1_3 = calculate_F1_score_graph(prec, selection=nonzero_3)
 
                     # Post-inference F1-score
-                    F1_pis = []
-                    for k in range(tau.shape[0]):
-                        F1_pi_k = calculate_F1_score_graph(prec, selection=nonzero_ints[k])
-                        F1_pis.append(F1_pi_k)
+                    F1_pi_1 = calculate_F1_score_graph(prec, selection=nonzero_1_int)
+                    F1_pi_2 = calculate_F1_score_graph(prec, selection=nonzero_2_int)
+                    F1_pi_3 = calculate_F1_score_graph(prec, selection=nonzero_3_int)
 
                     # Conditional Power post inference
-                    cond_powers = []
-                    for k in range(tau.shape[0]):
-                        cond_power_k = calculate_cond_power_graph(prec, selection=nonzeros[k],
-                                                                 selection_CI=nonzero_ints[k])
-                        cond_powers.append(cond_power_k)
+                    cond_power1 = calculate_cond_power_graph(prec, selection=nonzero_1,
+                                                             selection_CI=nonzero_1_int)
+                    cond_power2 = calculate_cond_power_graph(prec, selection=nonzero_2,
+                                                             selection_CI=nonzero_2_int)
+                    cond_power3 = calculate_cond_power_graph(prec, selection=nonzero_3,
+                                                             selection_CI=nonzero_3_int)
 
                     # FDP post inference
-                    FDPs = []
-                    for k in range(tau.shape[0]):
-                        FDPk = calculate_FDP_graph(beta_true=prec, selection=nonzero_ints[k])
-                        FDPs.append(FDPk)
+                    FDP1 = calculate_FDP_graph(beta_true=prec, selection=nonzero_1_int)
+                    FDP2 = calculate_FDP_graph(beta_true=prec, selection=nonzero_2_int)
+                    FDP3 = calculate_FDP_graph(beta_true=prec, selection=nonzero_3_int)
 
-                    # Selection power
-                    sel_power = []
-                    for k in range(tau.shape[0]):
-                        sel_power_k = calculate_power_graph(beta_true=prec, selection=nonzeros[k])
-                        sel_power.append(sel_power_k)
 
-                    # Power post-inference
-                    power_pis = []
-                    for k in range(tau.shape[0]):
-                        power_pi_k = calculate_power_graph(beta_true=prec, selection=nonzero_ints[k])
-                        power_pis.append(power_pi_k)
+                    # First scale coverage
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
+                    oper_char["E size"].append(nonzero_1.sum())
+                    oper_char["coverage rate"].append(np.mean(cov_rate_1))
+                    oper_char["randomizer scale"].append(tau[0])
+                    oper_char["avg length"].append(np.mean(avg_len_1))
+                    oper_char["F1 score"].append(F1_1)
+                    oper_char["F1 score (post inf)"].append(F1_pi_1)
+                    oper_char["Cond. power"].append(cond_power1)
+                    oper_char["FDP"].append(FDP1)
 
-                    for k in range(tau.shape[0]):
-                        oper_char["randomizer scale"].append(tau[k])
-                        oper_char["E size"].append(nonzeros[k].sum())
-                        oper_char["coverage rate"].append(np.mean(cov_rates[k]))
-                        oper_char["avg length"].append(np.mean(avg_lens[k]))
-                        oper_char["F1 score"].append(F1s[k])
-                        oper_char["F1 score (post inf)"].append(F1_pis[k])
-                        oper_char["Cond. power"].append(cond_powers[k])
-                        oper_char["FDP"].append(FDPs[k])
-                        oper_char["Selection power"].append(sel_power[k])
-                        oper_char["Power post inf"].append(power_pis[k])
+                    # Second scale coverage
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
+                    oper_char["E size"].append(nonzero_2.sum())
+                    oper_char["coverage rate"].append(np.mean(cov_rate_2))
+                    oper_char["randomizer scale"].append(tau[1])
+                    oper_char["avg length"].append(np.mean(avg_len_2))
+                    oper_char["F1 score"].append(F1_2)
+                    oper_char["F1 score (post inf)"].append(F1_pi_2)
+                    oper_char["Cond. power"].append(cond_power2)
+                    oper_char["FDP"].append(FDP2)
+
+                    # Third Inference coverage
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
+                    oper_char["E size"].append(nonzero_3.sum())
+                    oper_char["coverage rate"].append(np.mean(cov_rate_3))
+                    oper_char["randomizer scale"].append(tau[2])
+                    oper_char["avg length"].append(np.mean(avg_len_3))
+                    oper_char["F1 score"].append(F1_3)
+                    oper_char["F1 score (post inf)"].append(F1_pi_3)
+                    oper_char["Cond. power"].append(cond_power3)
+                    oper_char["FDP"].append(FDP3)
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
@@ -225,12 +234,6 @@ if __name__ == '__main__':
     start, end = int(argv[1]), int(argv[2])
     logic_tf = int(argv[3])
     ncores = int(argv[4])
-    fixnp = int(argv[5])
-    if fixnp == 1:
-        fixnp = True
-    else:
-        fixnp = False
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=logic_tf,
-                               ncores=ncores, fix_np=fixnp)#argv[3])#, logic_tf=logic_tf, s=s)
+    nbd_simulations_vary_omega(range_=range(start, end), logic_tf=logic_tf, ncores=ncores)#argv[3])#, logic_tf=logic_tf, s=s)
