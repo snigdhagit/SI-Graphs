@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +58,7 @@
       <recent name="$PROJECT_DIR$/selectinf/Tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.nbd_simulation">
+  <component name="RunManager" selected="Python.nbd_simulation_vary_signal">
     <configuration name="nbd_simulation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SI-Graphs" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,28 +147,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_nbd_simulations.test_nbd_simulations" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="nbd_simulation_vary_signal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SI-Graphs" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/selectinf/Tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_nbd_simulations.test_nbd_simulations&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.nbd_simulation" />
+        <item itemvalue="Python.nbd_simulation_vary_signal" />
         <item itemvalue="Python.nbd_simulation_vary_omega" />
+        <item itemvalue="Python.nbd_simulation" />
         <item itemvalue="Python.nbd_simulation_np" />
         <item itemvalue="Python.nbd_simulation_logic" />
-        <item itemvalue="Python tests.Python tests for test_nbd_simulations.test_nbd_simulations" />
       </list>
     </recent_temporary>
   </component>
@@ -218,7 +226,7 @@
       <workItem from="1699403441033" duration="51523000" />
       <workItem from="1699828358230" duration="4782000" />
       <workItem from="1699979973636" duration="1082000" />
-      <workItem from="1700079496528" duration="2769000" />
+      <workItem from="1700079496528" duration="12409000" />
     </task>
     <servers />
   </component>
@@ -238,8 +246,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SI_Graphs$nbd_simulation_np.coverage" NAME="nbd_simulation_np Coverage Results" MODIFIED="1699751561093" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
+    <SUITE FILE_PATH="coverage/SI_Graphs$nbd_simulation_vary_signal.coverage" NAME="nbd_simulation_vary_signal Coverage Results" MODIFIED="1700097802184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
     <SUITE FILE_PATH="coverage/SI_Graphs$nbd_simulation.coverage" NAME="nbd_simulation Coverage Results" MODIFIED="1699843173276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
-    <SUITE FILE_PATH="coverage/SI_Graphs$nbd_simulation_vary_omega.coverage" NAME="nbd_simulation_vary_omega Coverage Results" MODIFIED="1699840672954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
+    <SUITE FILE_PATH="coverage/SI_Graphs$nbd_simulation_vary_omega.coverage" NAME="nbd_simulation_vary_omega Coverage Results" MODIFIED="1700095452272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
     <SUITE FILE_PATH="coverage/SI_Graphs$.coverage" NAME=" Coverage Results" MODIFIED="1699243122046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
     <SUITE FILE_PATH="coverage/SI_Graphs$nbd_simulation_logic.coverage" NAME="nbd_simulation_logic Coverage Results" MODIFIED="1699655866875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/selectinf/Tests" />
   </component>
