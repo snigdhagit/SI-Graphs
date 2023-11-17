@@ -98,12 +98,12 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
             print(i)
             weights_const = 0.5
             ridge_const = 1
-            ncoarse = 50
+            ncoarse = 500
 
             # np.random.seed(i)
 
             # Vary randomizer scale from 0.5 to 5 on an equi-spaced grid
-            tau = np.array([0.5, 1, 2, 3, 4])
+            tau = np.array([np.sqrt(0.5), 1, np.sqrt(2), np.sqrt(3), 2])
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
