@@ -62,7 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_signal(m=4, proportion=0.5, logic_tf=0,
+def nbd_simulations_vary_signal(m=3, proportion=0.5, logic_tf=0,
                                 range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
