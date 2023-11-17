@@ -73,7 +73,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
     # Operating characteristics
     oper_char = {}
     oper_char["n,p"] = []
-    oper_char["randomizer scale"] = []
+    oper_char["randomizer variance"] = []
     oper_char["coverage rate"] = []
     oper_char["avg length"] = []
     oper_char["F1 score"] = []
