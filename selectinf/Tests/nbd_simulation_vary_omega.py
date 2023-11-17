@@ -103,7 +103,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
             # np.random.seed(i)
 
             # Vary randomizer scale from 0.5 to 5 on an equi-spaced grid
-            tau = np.array([np.sqrt(0.5), 1, np.sqrt(2), np.sqrt(3), 2])
+            tau_sq = np.array([0.5, 1, 2, 3, 4])
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
@@ -116,10 +116,10 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
                 instances = []
                 nonzero_sums = []
 
-                for k in range(tau.shape[0]):
+                for k in range(tau_sq.shape[0]):
                     nonzero_k, instance_k = approx_inference_sim(X, prec, weights_const=weights_const,
                                                                  ridge_const=ridge_const,
-                                                                 randomizer_scale=tau[k],
+                                                                 randomizer_scale=np.sqrt(tau_sq[k]),
                                                                  parallel=False,
                                                                  logic=logic, solve_only=True, continued=False,
                                                                  nbd_instance_cont=None)
@@ -134,11 +134,11 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
                     intervals = []
                     cov_rates = []
                     avg_lens = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         if not noselection:
                             nonzero_k, intervals_k, cov_rate_k, avg_len_k \
                                 = approx_inference_sim(X, prec, weights_const=weights_const,
-                                                       ridge_const=ridge_const, randomizer_scale=tau[k],
+                                                       ridge_const=ridge_const, randomizer_scale=np.sqrt(tau_sq[k]),
                                                        parallel=True, ncores=ncores,
                                                        logic=logic, solve_only=False, continued=True,
                                                        nbd_instance_cont=instances[k], ncoarse=ncoarse)
@@ -151,55 +151,55 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
                 if not noselection:
                     # Collect values shared across scales
                     # First scale coverage
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
 
                     # F1 scores
                     # Post-inference selection
                     nonzero_ints = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         nonzero_k_int = interval_selection(intervals[k], nonzeros[k])
                         nonzero_ints.append(nonzero_k_int)
 
                     # Selection F1-score
                     F1s = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         F1_k = calculate_F1_score_graph(prec, selection=nonzeros[k])
                         F1s.append(F1_k)
 
                     # Post-inference F1-score
                     F1_pis = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         F1_pi_k = calculate_F1_score_graph(prec, selection=nonzero_ints[k])
                         F1_pis.append(F1_pi_k)
 
                     # Conditional Power post inference
                     cond_powers = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         cond_power_k = calculate_cond_power_graph(prec, selection=nonzeros[k],
                                                                  selection_CI=nonzero_ints[k])
                         cond_powers.append(cond_power_k)
 
                     # FDP post inference
                     FDPs = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         FDPk = calculate_FDP_graph(beta_true=prec, selection=nonzero_ints[k])
                         FDPs.append(FDPk)
 
                     # Selection power
                     sel_power = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         sel_power_k = calculate_power_graph(beta_true=prec, selection=nonzeros[k])
                         sel_power.append(sel_power_k)
 
                     # Power post-inference
                     power_pis = []
-                    for k in range(tau.shape[0]):
+                    for k in range(tau_sq.shape[0]):
                         power_pi_k = calculate_power_graph(beta_true=prec, selection=nonzero_ints[k])
                         power_pis.append(power_pi_k)
 
-                    for k in range(tau.shape[0]):
-                        oper_char["randomizer scale"].append(tau[k])
+                    for k in range(tau_sq.shape[0]):
+                        oper_char["randomizer variance"].append(tau_sq[k])
                         oper_char["E size"].append(nonzeros[k].sum())
                         oper_char["coverage rate"].append(np.mean(cov_rates[k]))
                         oper_char["avg length"].append(np.mean(avg_lens[k]))
