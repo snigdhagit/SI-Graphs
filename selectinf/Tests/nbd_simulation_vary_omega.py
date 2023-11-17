@@ -96,7 +96,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
         for i in range(range_.start, range_.stop):
             n_instance = 0
             print(i)
-            weights_const = 0.5
+            weights_const = 0.3
             ridge_const = 1
             ncoarse = 500
 
@@ -126,6 +126,8 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
                     nonzeros.append(nonzero_k)
                     instances.append(instance_k)
                     nonzero_sums.append(nonzero_k.sum())
+                    print("tau sq:", tau_sq[k], "|E|:", nonzero_k.sum(),
+                          "|E^*|:", (prec !=0).sum())
 
                 noselection = np.min(nonzero_sums) == 0
 
