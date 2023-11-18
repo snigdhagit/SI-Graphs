@@ -96,7 +96,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
         for i in range(range_.start, range_.stop):
             n_instance = 0
             print(i)
-            weights_const = 0.3
+            weights_const = 0.2
             ridge_const = 1
             ncoarse = 500
 
@@ -107,7 +107,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.6)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.7)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
