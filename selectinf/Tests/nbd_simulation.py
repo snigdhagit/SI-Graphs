@@ -62,7 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations(m=4, proportion=0.5, logic_tf=0,
+def nbd_simulations(m=3, proportion=0.5, logic_tf=0,
                     range_=range(0, 100), ncores=4, fix_np=True):
     # Encoding binary logic into str
     if logic_tf == 0:
@@ -93,7 +93,7 @@ def nbd_simulations(m=4, proportion=0.5, logic_tf=0,
         n = np_pair[0]
         p = np_pair[1]
         ## print(n, p)
-        weights_const = 0.5
+        weights_const = 0.2
         ridge_const = 1.
         randomizer_scale = 1.
         ncoarse = 200
@@ -104,7 +104,7 @@ def nbd_simulations(m=4, proportion=0.5, logic_tf=0,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.6)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.7)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set

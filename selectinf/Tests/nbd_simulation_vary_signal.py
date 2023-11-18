@@ -91,7 +91,7 @@ def nbd_simulations_vary_signal(m=3, proportion=0.5, logic_tf=0,
         n = np_pair[0]
         p = np_pair[1]
         ## print(n, p)
-        weights_const = 0.5
+        weights_const = 0.2
         ridge_const = 1.
         randomizer_scale = 1.
         ncoarse = 200
