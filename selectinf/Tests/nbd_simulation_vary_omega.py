@@ -144,6 +144,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
                                                        parallel=True, ncores=ncores,
                                                        logic=logic, solve_only=False, continued=True,
                                                        nbd_instance_cont=instances[k], ncoarse=ncoarse)
+                            print("tau sq:", tau_sq[k], "inference done")
                             nonzeros.append(nonzero_k)
                             intervals.append(intervals_k)
                             cov_rates.append(cov_rate_k)
