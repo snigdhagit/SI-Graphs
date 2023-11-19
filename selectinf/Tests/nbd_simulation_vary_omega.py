@@ -98,7 +98,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
             print(i)
             weights_const = 0.2
             ridge_const = 1
-            ncoarse = 500
+            ncoarse = 250
 
             # np.random.seed(i)
 
