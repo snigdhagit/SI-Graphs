@@ -150,6 +150,7 @@ def nbd_simulations(m=3, proportion=0.5, logic_tf=0,
                                                                                        nonzero_cont=nonzero_ds,
                                                                                        subset_cont=subset_select)
 
+                    print("|E|:", nonzero_approx.sum())
                     # Approximate inference
                     nonzero_approx, intervals_approx, cov_rate_approx, avg_len_approx \
                         = approx_inference_sim(X, prec, weights_const=weights_const,
@@ -225,15 +226,15 @@ def nbd_simulations(m=3, proportion=0.5, logic_tf=0,
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
-                    break  # Go to next iteration if we have some selection
+                    oper_char_df = pd.DataFrame.from_dict(oper_char)
+                    if fix_np:
+                        oper_char_df.to_csv('GGM_naive_ds_approx_logic' + str(logic_tf) + '_n400_p20_'
+                                            + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+                    else:
+                        oper_char_df.to_csv('GGM_naive_ds_approx_logic' + str(logic_tf) + '_'
+                                            + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
-    oper_char_df = pd.DataFrame.from_dict(oper_char)
-    if fix_np:
-        oper_char_df.to_csv('GGM_naive_ds_approx_logic' + str(logic_tf) + '_n400_p20_'
-                            + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
-    else:
-        oper_char_df.to_csv('GGM_naive_ds_approx_logic'+ str(logic_tf) + '_'
-                            + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
+                    break  # Go to next iteration if we have some selection
 
 if __name__ == '__main__':
     argv = sys.argv

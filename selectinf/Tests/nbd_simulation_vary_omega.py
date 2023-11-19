@@ -214,11 +214,12 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
+                    # Save results to avoid losing info
+                    oper_char_df = pd.DataFrame.from_dict(oper_char)
+                    oper_char_df.to_csv('GGM_vary_omega_logic' + str(logic_tf) + '_'
+                                        + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
                     break  # Go to next iteration if we have some selection
 
-    oper_char_df = pd.DataFrame.from_dict(oper_char)
-    oper_char_df.to_csv('GGM_vary_omega_logic' + str(logic_tf) + '_'
-                        + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
 
 if __name__ == '__main__':
