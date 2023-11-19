@@ -107,6 +107,16 @@ def _approx_log_reference(query_spec, grid, j0, k0, S_copy, n, p):
 
     return ref_hat
 
+def log_det_S_j_k(S_copy, j0, k0, s_val, n, p):
+    S_j_k = S_copy
+    S_j_k[j0,k0] = s_val
+    S_j_k[k0,j0] = s_val
+    if np.linalg.det(S_j_k) < 0:
+        #print("negative det", np.linalg.det(S_j_k),
+        #      "grid", s_val)
+        return -np.inf
+    return np.log((np.linalg.det(S_j_k))) * (n-p-1)/2
+
 def approx_inference(j0k0, query_spec, X_n, n, p, ngrid=10000, ncoarse=None, level=0.9):
     j0 = j0k0[0]
     k0 = j0k0[1]
@@ -126,23 +136,14 @@ def approx_inference(j0k0, query_spec, X_n, n, p, ngrid=10000, ncoarse=None, lev
     ref_hat = _approx_log_reference(query_spec, eval_grid, j0, k0, S_copy, n, p)
     #print("ref_hat shape:", ref_hat.shape)
 
-    def log_det_S_j_k(s_val):
-        S_j_k = S_copy
-        S_j_k[j0,k0] = s_val
-        S_j_k[k0,j0] = s_val
-        if np.linalg.det(S_j_k) < 0:
-            #print("negative det", np.linalg.det(S_j_k),
-            #      "grid", s_val)
-            return -np.inf
-        return np.log((np.linalg.det(S_j_k))) * (n-p-1)/2
-
     if ncoarse is None:
         logWeights = np.zeros((ngrid,))
         for g in range(ngrid):
             #print(logWeights[g])
             #print(log_det_S_j_k(eval_grid[g]))
             #print(ref_hat[g])
-            logWeights[g] = log_det_S_j_k(eval_grid[g]) + ref_hat[g]
+            logWeights[g] = log_det_S_j_k(S_copy=S_copy, j0=j0, k0=k0,
+                                          s_val = eval_grid[g], n=n, p=p) + ref_hat[g]
 
         # plt.plot(eval_grid, logWeights)
 
@@ -166,7 +167,8 @@ def approx_inference(j0k0, query_spec, X_n, n, p, ngrid=10000, ncoarse=None, lev
         for g in range(ngrid):
             #print(log_det_S_j_k(grid[g]))
             #print(approx_fn(grid[g]))
-            logWeights[g] = log_det_S_j_k(grid[g]) + approx_fn(grid[g])
+            logWeights[g] = log_det_S_j_k(S_copy=S_copy, j0=j0, k0=k0, s_val = grid[g],
+                                          n=n, p=p) + approx_fn(grid[g])
 
         # plt.plot(grid, logWeights)
 

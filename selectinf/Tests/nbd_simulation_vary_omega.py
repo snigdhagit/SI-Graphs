@@ -62,7 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
+def nbd_simulations_vary_omega(m=2, logic_tf=1, range_=range(0, 100),
                                ncores=4, fix_np=True):
     # Encoding binary logic into str
     if logic_tf == 0:
@@ -107,7 +107,7 @@ def nbd_simulations_vary_omega(m=3, logic_tf=1, range_=range(0, 100),
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.7)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=0.4)
                 n, p = X.shape
                 # print((np.abs(prec) > 1e-5))
                 noselection = False  # flag for a certain method having an empty selected set
