@@ -62,7 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_signal(m=3, proportion=0.5, logic_tf=0,
+def nbd_simulations_vary_signal(m=2, proportion=0.5, logic_tf=0,
                                 range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
@@ -91,7 +91,7 @@ def nbd_simulations_vary_signal(m=3, proportion=0.5, logic_tf=0,
         n = np_pair[0]
         p = np_pair[1]
         ## print(n, p)
-        weights_const = 0.2
+        weights_const = 0.5
         ridge_const = 1.
         randomizer_scale = 1.
         ncoarse = 200
@@ -119,6 +119,7 @@ def nbd_simulations_vary_signal(m=3, proportion=0.5, logic_tf=0,
                                                                            nbd_instance_cont=None)
 
                     noselection = (nonzero_approx.sum() == 0)
+                    print("Approx selection:", nonzero_approx.sum())
 
                 # Continue with simultaneously nonzero instance
                 if not noselection:
@@ -212,9 +213,9 @@ def nbd_simulations_vary_signal(m=3, proportion=0.5, logic_tf=0,
 if __name__ == '__main__':
     argv = sys.argv
     # argv = [..., start, end, logic_tf, ncores]
-    start, end = int(argv[1]), int(argv[2])
-    logic_tf = int(argv[3])
-    ncores = int(argv[4])
+    start, end = 0, 50#int(argv[1]), int(argv[2])
+    logic_tf = 0#int(argv[3])
+    ncores = 4#int(argv[4])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
     nbd_simulations_vary_signal(range_=range(start, end), logic_tf=logic_tf,
