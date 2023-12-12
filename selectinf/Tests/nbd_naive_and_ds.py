@@ -446,7 +446,11 @@ def calculate_F1_score_graph(beta_true, selection):
         precision = (nonzero_true * selection).sum() / selection.sum()
     else:
         precision = 0
-    recall = (nonzero_true * selection).sum() / nonzero_true.sum()
+
+    if nonzero_true.sum() > 0:
+        recall = (nonzero_true * selection).sum() / nonzero_true.sum()
+    else:
+        recall = 0
 
     if precision + recall > 0:
         return 2 * precision * recall / (precision + recall)
@@ -501,8 +505,11 @@ def calculate_power_graph(beta_true, selection):
     nonzero_true = np.triu(nonzero_true)
     selection = np.triu(selection)
 
-    # power
-    power = (nonzero_true * selection).sum() / nonzero_true.sum()
+    if nonzero_true.sum() > 0:
+        # power
+        power = (nonzero_true * selection).sum() / nonzero_true.sum()
+    else:
+        power = 0
 
     return power
 

@@ -62,8 +62,8 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_signal(m=2, proportion=0.5, logic_tf=0,
-                                range_=range(0, 100), ncores=4):
+def nbd_simulations_vary_sparsity(proportion=0.5, logic_tf=0,
+                                  range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
         logic = 'OR'
@@ -83,11 +83,11 @@ def nbd_simulations_vary_signal(m=2, proportion=0.5, logic_tf=0,
     oper_char["Cond. power"] = []
     oper_char["Power post inf"] = []
     oper_char["FDP"] = []
-    oper_char["signal"] = []
+    oper_char["m"] = []
 
     np_pair = (400, 20)
 
-    for signal in [0.4, 0.5, 0.6, 0.7, 0.8]:
+    for m in [1,2,3,4,5]:
         n = np_pair[0]
         p = np_pair[1]
         ## print(n, p)
@@ -102,7 +102,7 @@ def nbd_simulations_vary_signal(m=2, proportion=0.5, logic_tf=0,
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
-                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=signal)
+                prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=1)
                 n, p = X.shape
 
                 nonzero_ds, subset_select = data_splitting(X, prec, weights_const=weights_const, proportion=proportion,
@@ -186,7 +186,7 @@ def nbd_simulations_vary_signal(m=2, proportion=0.5, logic_tf=0,
                     oper_char["FDP"].append(FDP_ds)
                     oper_char["Selection power"].append(sel_power_ds)
                     oper_char["Power post inf"].append(power_pi_ds)
-                    oper_char["signal"].append(signal)
+                    oper_char["m"].append(m)
 
                     # Approximate Inference coverage
                     oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
@@ -200,13 +200,13 @@ def nbd_simulations_vary_signal(m=2, proportion=0.5, logic_tf=0,
                     oper_char["FDP"].append(FDP_approx)
                     oper_char["Selection power"].append(sel_power_approx)
                     oper_char["Power post inf"].append(power_pi_approx)
-                    oper_char["signal"].append(signal)
+                    oper_char["m"].append(m)
 
                     print("# Instances needed for a non-null selection:", n_instance)
 
                     # Save results to avoid losing info
                     oper_char_df = pd.DataFrame.from_dict(oper_char)
-                    oper_char_df.to_csv('GGM_vary_signal_logic' + str(logic_tf) + '_'
+                    oper_char_df.to_csv('GGM_vary_sparsity' + str(logic_tf) + '_'
                                         + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
                     break  # Go to next iteration if we have some selection
 
@@ -218,5 +218,5 @@ if __name__ == '__main__':
     ncores = int(argv[4])
     #s = int(argv[4])
     # print("start:", start, ", end:", end)
-    nbd_simulations_vary_signal(range_=range(start, end), logic_tf=logic_tf,
-                                ncores=ncores,m=2)#, logic_tf=logic_tf, s=s)
+    nbd_simulations_vary_sparsity(range_=range(start, end), logic_tf=logic_tf,
+                                  ncores=ncores)#, logic_tf=logic_tf, s=s)

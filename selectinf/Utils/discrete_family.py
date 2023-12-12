@@ -125,7 +125,8 @@ class discrete_family(object):
     def theta(self, _theta):
         if _theta != self._theta:
             _thetaX = _theta * self.sufficient_stat + self._lw
-            _largest = _thetaX.max() # - 10  # try to avoid over/under flow, 10 seems arbitrary
+            # print("_largest:",_thetaX.max())
+            _largest = _thetaX.max() - 10  # try to avoid over/under flow, 10 seems arbitrary
             _exp_thetaX = np.exp(_thetaX - _largest)
             if np.isnan(_exp_thetaX).sum() != 0:
                 print("Normalized pdf is nan")
