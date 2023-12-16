@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_sparsity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/GGM_vary_signal_logic1_0_50.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_ds.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_naive_and_ds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/GGM_vary_sparsity0_0_50.csv" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/GGM_vary_sparsity0_0_50.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/Tests/plotting.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/plotting.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Utils/discrete_family.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,7 +233,10 @@
       <workItem from="1701113456492" duration="560000" />
       <workItem from="1701114024352" duration="161000" />
       <workItem from="1701114200254" duration="4052000" />
-      <workItem from="1702061070279" duration="14084000" />
+      <workItem from="1702061070279" duration="17575000" />
+      <workItem from="1702410062998" duration="1007000" />
+      <workItem from="1702411081468" duration="25000" />
+      <workItem from="1702544070314" duration="2233000" />
     </task>
     <servers />
   </component>
