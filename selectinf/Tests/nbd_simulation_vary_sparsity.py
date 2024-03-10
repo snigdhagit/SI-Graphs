@@ -22,6 +22,9 @@ from selectinf.Tests.nbd_naive_and_ds import *
 def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_scale=1.,
                          parallel=False, ncores=4, logic = 'OR', ncoarse=200,
                          solve_only=False, continued=False, nbd_instance_cont=None):
+    if ncores == 0:
+        parallel = False
+
     # Precision matrix is in its original order, not scaled by root n
     # X is also in its original order
     n,p = X.shape
@@ -62,7 +65,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_sparsity(proportion=0.5, logic_tf=0,
+def nbd_simulations_vary_sparsity(logic_tf=0,
                                   range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
@@ -105,11 +108,19 @@ def nbd_simulations_vary_sparsity(proportion=0.5, logic_tf=0,
                 prec,cov,X = GGM_instance(n=n, p=p, max_edges=m, signal=1)
                 n, p = X.shape
 
-                nonzero_ds, subset_select = data_splitting(X, prec, weights_const=weights_const, proportion=proportion,
+                nonzero_ds, subset_select = data_splitting(X, prec, weights_const=weights_const, proportion=0.5,
                                                            logic=logic, solve_only=True, continued=False,
                                                            nonzero_cont=None, subset_cont=None)
 
                 noselection = (nonzero_ds.sum() == 0)
+
+                if not noselection:
+                    nonzero_ds67, subset_select67 = data_splitting(X, prec, weights_const=weights_const,
+                                                                   proportion=0.67,
+                                                                   logic=logic, solve_only=True, continued=False,
+                                                                   nonzero_cont=None, subset_cont=None)
+                    noselection = (nonzero_ds67.sum() == 0)
+
                 if not noselection:
                     nonzero_approx, instance_approx = approx_inference_sim(X, prec, weights_const=weights_const,
                                                                            ridge_const=ridge_const,
@@ -123,14 +134,22 @@ def nbd_simulations_vary_sparsity(proportion=0.5, logic_tf=0,
 
                 # Continue with simultaneously nonzero instance
                 if not noselection:
-                    # Data splitting
+                    # Data splitting with 50-50 split
                     nonzero_ds, intervals_ds, cov_rate_ds, avg_len_ds = data_splitting(X, prec,
                                                                                        weights_const=weights_const,
-                                                                                       proportion=proportion,
+                                                                                       proportion=0.5,
                                                                                        logic=logic, solve_only=False,
                                                                                        continued=True,
                                                                                        nonzero_cont=nonzero_ds,
                                                                                        subset_cont=subset_select)
+
+                    nonzero_ds67, intervals_ds67, cov_rate_ds67, avg_len_ds67 = data_splitting(X, prec,
+                                                                                       weights_const=weights_const,
+                                                                                       proportion=0.67,
+                                                                                       logic=logic, solve_only=False,
+                                                                                       continued=True,
+                                                                                       nonzero_cont=nonzero_ds67,
+                                                                                       subset_cont=subset_select67)
 
                     # Approximate inference
                     nonzero_approx, intervals_approx, cov_rate_approx, avg_len_approx \
@@ -144,33 +163,41 @@ def nbd_simulations_vary_sparsity(proportion=0.5, logic_tf=0,
                     # F1 scores
                     # Post-inference selection
                     nonzero_ds_int = interval_selection(intervals_ds, nonzero_ds)
+                    nonzero_ds67_int = interval_selection(intervals_ds67, nonzero_ds67)
                     nonzero_approx_int = interval_selection(intervals_approx, nonzero_approx)
 
                     # Selection F1-score
                     F1_ds = calculate_F1_score_graph(prec, selection=nonzero_ds)
+                    F1_ds67 = calculate_F1_score_graph(prec, selection=nonzero_ds67)
                     F1_approx = calculate_F1_score_graph(prec, selection=nonzero_approx)
 
                     # Post-inference F1-score
                     F1_pi_ds = calculate_F1_score_graph(prec, selection=nonzero_ds_int)
+                    F1_pi_ds67 = calculate_F1_score_graph(prec, selection=nonzero_ds67_int)
                     F1_pi_approx = calculate_F1_score_graph(prec, selection=nonzero_approx_int)
 
 
                     # Conditional Power post inference
                     cond_power_ds = calculate_cond_power_graph(prec, selection=nonzero_ds,
                                                              selection_CI=nonzero_ds_int)
+                    cond_power_ds67 = calculate_cond_power_graph(prec, selection=nonzero_ds67,
+                                                               selection_CI=nonzero_ds67_int)
                     cond_power_approx = calculate_cond_power_graph(prec, selection=nonzero_approx,
                                                              selection_CI=nonzero_approx_int)
 
                     # FDP post inference
                     FDP_ds = calculate_FDP_graph(beta_true=prec, selection=nonzero_ds_int)
+                    FDP_ds67 = calculate_FDP_graph(beta_true=prec, selection=nonzero_ds67_int)
                     FDP_approx = calculate_FDP_graph(beta_true=prec, selection=nonzero_approx_int)
 
                     # Selection power
                     sel_power_ds = calculate_power_graph(beta_true=prec, selection=nonzero_ds)
+                    sel_power_ds67 = calculate_power_graph(beta_true=prec, selection=nonzero_ds67)
                     sel_power_approx = calculate_power_graph(beta_true=prec, selection=nonzero_approx)
 
                     # Power post inference
                     power_pi_ds = calculate_power_graph(beta_true=prec, selection=nonzero_ds_int)
+                    power_pi_ds67 = calculate_power_graph(beta_true=prec, selection=nonzero_ds67_int)
                     power_pi_approx = calculate_power_graph(beta_true=prec, selection=nonzero_approx_int)
 
 
@@ -181,11 +208,25 @@ def nbd_simulations_vary_sparsity(proportion=0.5, logic_tf=0,
                     oper_char["avg length"].append(np.mean(avg_len_ds))
                     oper_char["F1 score"].append(F1_ds)
                     oper_char["F1 score (post inf)"].append(F1_pi_ds)
-                    oper_char["method"].append('Data Splitting')
+                    oper_char["method"].append('Data Splitting (50%)')
                     oper_char["Cond. power"].append(cond_power_ds)
                     oper_char["FDP"].append(FDP_ds)
                     oper_char["Selection power"].append(sel_power_ds)
                     oper_char["Power post inf"].append(power_pi_ds)
+                    oper_char["m"].append(m)
+
+                    # Data splitting coverage with a 67-32 split
+                    oper_char["n,p"].append("(" + str(n) + "," + str(p) + ")")
+                    oper_char["E size"].append(nonzero_ds67.sum())
+                    oper_char["coverage rate"].append(np.mean(cov_rate_ds67))
+                    oper_char["avg length"].append(np.mean(avg_len_ds67))
+                    oper_char["F1 score"].append(F1_ds67)
+                    oper_char["F1 score (post inf)"].append(F1_pi_ds67)
+                    oper_char["method"].append('Data Splitting (67%)')
+                    oper_char["Cond. power"].append(cond_power_ds67)
+                    oper_char["FDP"].append(FDP_ds67)
+                    oper_char["Selection power"].append(sel_power_ds67)
+                    oper_char["Power post inf"].append(power_pi_ds67)
                     oper_char["m"].append(m)
 
                     # Approximate Inference coverage
