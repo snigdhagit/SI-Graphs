@@ -258,7 +258,7 @@ def nbd_simulations_vary_weights(m=2, proportion=0.5, logic_tf=0,
     # oper_char["Power post inf"] = []
     oper_char["FDP"] = []
 
-    weights = [0.25, 0.35, 0.45]
+    weights = [0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 
     for weights_const in weights:
         n = 200#np_pair[0]
@@ -400,7 +400,7 @@ def nbd_simulations_vary_weights(m=2, proportion=0.5, logic_tf=0,
                     print("# Instances needed for a non-null selection:", n_instance)
 
                     oper_char_df = pd.DataFrame.from_dict(oper_char)
-                    oper_char_df.to_csv('GGM_comp_logic1_additional' + str(logic_tf) + '_'
+                    oper_char_df.to_csv('GGM_comp_logic1_' + str(logic_tf) + '_'
                                         + str(range_.start) + '_' + str(range_.stop) + '.csv', index=False)
 
                     break  # Go to next iteration if we have some selection

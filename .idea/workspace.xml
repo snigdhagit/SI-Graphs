@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/instance_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/instance_notebook.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_signal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_sparsity.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_sparsity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selectinf/Tests/plotting.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/plotting.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -247,7 +245,15 @@
       <workItem from="1707409093462" duration="1140000" />
       <workItem from="1710019988521" duration="225000" />
       <workItem from="1710094273385" duration="8673000" />
-      <workItem from="1710293237480" duration="5012000" />
+      <workItem from="1710293237480" duration="8253000" />
+      <workItem from="1710387336878" duration="153000" />
+      <workItem from="1710437622849" duration="3905000" />
+      <workItem from="1710537861799" duration="13182000" />
+      <workItem from="1711306576903" duration="838000" />
+      <workItem from="1711400831846" duration="728000" />
+      <workItem from="1711842311037" duration="1872000" />
+      <workItem from="1711847618800" duration="4316000" />
+      <workItem from="1711931172731" duration="761000" />
     </task>
     <servers />
   </component>
