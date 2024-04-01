@@ -236,7 +236,7 @@ def nbd_simulations(m=3, proportion=0.5, logic_tf=0,
 
                     break  # Go to next iteration if we have some selection
 
-def nbd_simulations_vary_weights(m=2, proportion=0.5, logic_tf=0,
+def nbd_simulations_vary_weights(m=2, proportion=0.67, logic_tf=0,
                                  range_=range(0, 100), ncores=4):
     # Encoding binary logic into str
     if logic_tf == 0:
