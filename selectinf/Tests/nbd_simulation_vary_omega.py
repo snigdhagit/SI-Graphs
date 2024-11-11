@@ -62,7 +62,7 @@ def approx_inference_sim(X, prec, weights_const=1., ridge_const=0., randomizer_s
     return None, None, None, None
 
 
-def nbd_simulations_vary_omega(m=2, logic_tf=1, range_=range(0, 100),
+def nbd_simulations_vary_omega(m=2, logic_tf=0, range_=range(0, 100),
                                ncores=4, fix_np=True):
     # Encoding binary logic into str
     if logic_tf == 0:
@@ -85,7 +85,7 @@ def nbd_simulations_vary_omega(m=2, logic_tf=1, range_=range(0, 100),
     oper_char["FDP"] = []
 
     if fix_np:
-        np_list = [(400, 20)]
+        np_list = [(200, 10)]
     else:
         np_list = [(200, 10), (400, 20), (1000, 50)]
 
@@ -103,7 +103,7 @@ def nbd_simulations_vary_omega(m=2, logic_tf=1, range_=range(0, 100),
             # np.random.seed(i)
 
             # Vary randomizer scale from 0.5 to 5 on an equi-spaced grid
-            tau_sq = np.array([0.5, 1, 2, 3, 4])
+            tau_sq = np.array([0.5, 1, 2, 5, 10])
 
             while True:  # run until we get some selection
                 n_instance = n_instance + 1
