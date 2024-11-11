@@ -96,7 +96,7 @@ def nbd_simulations_vary_omega(m=2, logic_tf=0, range_=range(0, 100),
         for i in range(range_.start, range_.stop):
             n_instance = 0
             print(i)
-            weights_const = 0.2
+            weights_const = 0.4
             ridge_const = 1
             ncoarse = 250
 
