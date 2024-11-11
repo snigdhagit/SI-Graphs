@@ -141,7 +141,7 @@ def nbd_simulations_vary_omega(m=2, logic_tf=0, range_=range(0, 100),
                             nonzero_k, intervals_k, cov_rate_k, avg_len_k \
                                 = approx_inference_sim(X, prec, weights_const=weights_const,
                                                        ridge_const=ridge_const, randomizer_scale=np.sqrt(tau_sq[k]),
-                                                       parallel=True, ncores=ncores,
+                                                       parallel=False, ncores=ncores,
                                                        logic=logic, solve_only=False, continued=True,
                                                        nbd_instance_cont=instances[k], ncoarse=ncoarse)
                             print("tau sq:", tau_sq[k], "inference done")
