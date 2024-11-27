@@ -100,7 +100,7 @@ def nbd_simulations_vary_omega(m=2, logic_tf=0, range_=range(0, 100),
             ridge_const = 1
             ncoarse = 250
 
-            # np.random.seed(i)
+            np.random.seed(i)
 
             # Vary randomizer scale from 0.5 to 5 on an equi-spaced grid
             tau_sq = np.array([0.5, 1, 2, 5, 10])

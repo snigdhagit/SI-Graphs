@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5eaf370c-1cef-412f-a2a6-ef9aad8bcbf8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/selectinf/Tests/Results/VaryOmega/plotting.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_omega.py" beforeDir="false" afterPath="$PROJECT_DIR$/selectinf/Tests/nbd_simulation_vary_omega.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +41,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/yilingh/Desktop/PhD/SI_Codes/SI-Graphs/selectinf/Tests&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/yilingh/Desktop/PhD/SI_Codes/SI-Graphs/selectinf/Tests/Results/VaryOmega&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -52,6 +54,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/selectinf/Tests/Results/VaryOmega" />
       <recent name="$PROJECT_DIR$/selectinf/Tests" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -266,6 +269,10 @@
       <workItem from="1725579537156" duration="640000" />
       <workItem from="1727549150131" duration="105000" />
       <workItem from="1731268098353" duration="34000" />
+      <workItem from="1731290693197" duration="2288000" />
+      <workItem from="1731379780624" duration="2051000" />
+      <workItem from="1732286185093" duration="31000" />
+      <workItem from="1732669248039" duration="1563000" />
     </task>
     <servers />
   </component>
